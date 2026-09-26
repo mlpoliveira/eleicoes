@@ -76,7 +76,8 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
   Botões "Exportar: CSV | Excel" na busca, no comparador e no início (`components/Exportar.tsx`).
 - T10 "Pergunte aos dados": `backend/app/ia/` — `cliente.py` (chat/completions formato OpenAI; padrão
   API da NVIDIA: `NVIDIA_API_KEY`, `IA_BASE_URL`=https://integrate.api.nvidia.com/v1,
-  `IA_MODELO`=meta/llama-3.3-70b-instruct — precisa suportar tool calling; cliente injetável em
+  `IA_MODELO` (padrão `MODELO_PADRAO` em cliente.py; o meta/llama-3.3-70b-instruct foi aposentado
+  pela NVIDIA em 26/08/2026 — conferir a lista em `/v1/models`) — precisa suportar tool calling; cliente injetável em
   `criar_app(ia_cliente=...)`), `ferramentas.py` (10 ferramentas = funções das rotas, respostas enxutas),
   `neutralidade.py` (recusa ANTES do modelo: voto, melhores/piores/ranking, inferências pessoais;
   checagem de termos avaliativos DEPOIS, com 1 reescrita, senão resposta retida), `agente.py` (prompt

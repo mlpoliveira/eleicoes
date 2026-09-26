@@ -217,3 +217,21 @@ def test_cliente_http_formato_openai(monkeypatch):
     assert capturado["headers"]["Authorization"] == "Bearer chave-x"
     assert capturado["corpo"]["model"] == "meta/llama-3.3-70b-instruct"
     assert capturado["corpo"]["tools"][0]["type"] == "function"
+
+
+@pytest.mark.parametrize("status,trecho", [(410, "não está disponível"), (404, "não está disponível"),
+                                           (401, "recusou a chave")])
+def test_cliente_http_erros_claros(monkeypatch, status, trecho):
+    from app.ia.cliente import ErroIA
+    monkeypatch.setattr(httpx, "post", lambda *a, **k: httpx.Response(status, json={"detail": "x"}))
+    c = ClienteOpenAICompativel("chave", "https://integrate.api.nvidia.com/v1", "modelo/antigo")
+    with pytest.raises(ErroIA, match=trecho):
+        c.completar([{"role": "user", "content": "oi"}], [])
+
+
+def test_modelo_aposentado_vira_502_com_orientacao(banco_v1, monkeypatch):
+    monkeypatch.setattr(httpx, "post", lambda *a, **k: httpx.Response(410, json={"title": "Gone"}))
+    modelo = ClienteOpenAICompativel("chave", "https://integrate.api.nvidia.com/v1", "meta/llama-3.3-70b-instruct")
+    c = TestClient(criar_app(banco_v1, ia_cliente=modelo))
+    r = c.post("/api/perguntar", json={"pergunta": "Quantas candidaturas há no RJ?"})
+    assert r.status_code == 502 and "IA_MODELO" in r.json()["detail"]
