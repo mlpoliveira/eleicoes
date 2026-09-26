@@ -84,6 +84,8 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
   com as regras, até 6 rodadas, resposta JSON {criterio, resposta, calculo}, log em `logs/ia.jsonl`
   — fora do Git). Rota `POST /api/perguntar` (+ `GET /api/perguntar/status`); sem chave → 503.
   Tela `/perguntar`. Testes com modelo roteirizado (`tests/test_ia.py`), nunca chamam serviço externo.
+  `scripts/testar_modelos_ia.py` testa quais modelos do catálogo chamam as ferramentas (usa a cota da
+  chave). O agente descarta blocos `<think>` de modelos de raciocínio antes de ler o JSON.
 - Teste de neutralidade automatizado em `tests/test_api_comparar.py` (regex de termos avaliativos
   sobre o texto gerado; valores vindos da base são retirados antes). Gerador `v3` = v1 + candidatos
   em outro cargo (40) e outra UF (41).

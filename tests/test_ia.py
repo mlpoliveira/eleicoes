@@ -235,3 +235,23 @@ def test_modelo_aposentado_vira_502_com_orientacao(banco_v1, monkeypatch):
     c = TestClient(criar_app(banco_v1, ia_cliente=modelo))
     r = c.post("/api/perguntar", json={"pergunta": "Quantas candidaturas há no RJ?"})
     assert r.status_code == 502 and "IA_MODELO" in r.json()["detail"]
+
+
+def test_raciocinio_e_texto_em_volta_do_json(ia):
+    resposta = ('<think>O usuário quer {algo}. Vou responder.</think>\nAqui está:\n```json\n'
+                '{"criterio": "c", "resposta": "Há 40 candidaturas.", "calculo": ""}\n```')
+    cliente, _, _ = ia([{"content": resposta}])
+    r = perguntar(cliente, "Quantas candidaturas?")
+    assert r["resposta"] == "Há 40 candidaturas." and r["criterio"] == "c"
+
+
+def test_script_de_teste_de_modelos(monkeypatch):
+    import importlib.util
+    from conftest import RAIZ
+    spec = importlib.util.spec_from_file_location("tm", RAIZ / "scripts" / "testar_modelos_ia.py")
+    tm = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tm)
+    ok = ModeloRoteirizado([chamada("search_candidates", q="Maria da Silva", uf="RJ")])
+    assert tm.testar(ok) == ("OK", 'search_candidates({"q": "Maria da Silva", "uf": "RJ"})')
+    sem = ModeloRoteirizado([{"content": "Não sei."}])
+    assert tm.testar(sem)[0] == "NÃO chamou ferramenta"

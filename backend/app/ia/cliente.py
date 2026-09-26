@@ -22,7 +22,7 @@ class ClienteIA(Protocol):
         """Devolve a mensagem do assistente: {"content": str|None, "tool_calls": [...]|None}."""
 
 
-MODELO_PADRAO = "openai/gpt-oss-120b"
+MODELO_PADRAO = "moonshotai/kimi-k2.6"  # confirmar com scripts/testar_modelos_ia.py
 
 
 class ErroIA(Exception):

@@ -48,15 +48,26 @@ FORMATO DA RESPOSTA FINAL (depois de usar as ferramentas): somente um objeto JSO
  "calculo": "como os números foram obtidos (ferramentas e medidas usadas) ou vazio"}"""
 
 
+def _sem_raciocinio(texto: str) -> str:
+    """Modelos de raciocínio podem mandar o pensamento em <think>...</think> antes da resposta."""
+    texto = re.sub(r"<think>.*?</think>", "", texto or "", flags=re.S)
+    return texto.split("</think>")[-1].strip()
+
+
 def _extrair_json(texto: str) -> dict | None:
-    m = re.search(r"\{.*\}", texto or "", re.S)
-    if not m:
-        return None
-    try:
-        dados = json.loads(m.group(0))
-        return dados if isinstance(dados, dict) and "resposta" in dados else None
-    except json.JSONDecodeError:
-        return None
+    """Primeiro objeto JSON com a chave 'resposta' (tolera texto ou ```json em volta)."""
+    texto = _sem_raciocinio(texto)
+    decodificador = json.JSONDecoder()
+    for i, ch in enumerate(texto):
+        if ch != "{":
+            continue
+        try:
+            dados, _ = decodificador.raw_decode(texto[i:])
+        except json.JSONDecodeError:
+            continue
+        if isinstance(dados, dict) and "resposta" in dados:
+            return dados
+    return None
 
 
 def _registrar(entrada: dict):
@@ -98,7 +109,7 @@ def perguntar(pergunta: str, cliente: ClienteIA | None, cur) -> dict:
         mensagens.append({"role": "assistant", "content": msg.get("content") or "",
                           **({"tool_calls": chamadas} if chamadas else {})})
         if not chamadas:
-            final = msg.get("content") or ""
+            final = _sem_raciocinio(msg.get("content") or "")
             break
         for ch in chamadas:
             nome = ch["function"]["name"]
@@ -127,7 +138,7 @@ def perguntar(pergunta: str, cliente: ClienteIA | None, cur) -> dict:
                               "só fatos dos dados. Mesmo formato JSON."})
             msg = cliente.completar(mensagens, [])
             nova = _extrair_json(msg.get("content") or "") or {"criterio": saida.get("criterio"),
-                                                              "resposta": (msg.get("content") or "").strip(),
+                                                              "resposta": _sem_raciocinio(msg.get("content") or ""),
                                                               "calculo": saida.get("calculo")}
             termos2 = termos_avaliativos(" ".join(str(nova.get(k) or "") for k in ("criterio", "resposta", "calculo")),
                                          valores_base)
