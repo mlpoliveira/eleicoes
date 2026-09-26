@@ -38,6 +38,11 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
 - `ingestao/ingestao_tse.py`: carga versionada em DuckDB (`eleicoes.duckdb`). Uso:
   `python ingestao/ingestao_tse.py "<pasta dos zips>"`. Rodar de novo com nova geração do TSE
   cria nova carga e registra diferenças em `alteracao`.
+- Estrutura: `ingestao/`, `backend/` (só `pyproject.toml` por enquanto), `frontend/`, `tests/`, `docs/`
+  (`docs/inventario_tse.md` = saída do inventário).
+- Testes: `pip install -e "backend[dev]"` e `pytest` na raiz. Fixtures em `tests/conftest.py`
+  (`banco_v1` = 1 carga; `banco_v2` = cargas v1+v2 no mesmo banco). O gerador sintético cobre as
+  armadilhas abaixo (casos por índice documentados no topo de `tests/gerar_dados_sinteticos.py`).
 - Banco real validado: 20.987 candidatos; 19.156 com histórico; 14.670 já concorreram antes;
   5.597 já foram eleitos alguma vez; 266 bens com valor zero; 11 redes órfãs.
 

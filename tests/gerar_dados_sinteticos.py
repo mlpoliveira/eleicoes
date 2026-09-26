@@ -6,6 +6,12 @@ Uso: python tests/gerar_dados_sinteticos.py <pasta_destino> [v1|v2]
   v1 = 40 candidatos. v2 = nova geração: +1 candidato e o candidato 5 passa a INDEFERIDO
   (serve para testar a tabela `alteracao`). Casos cobertos: CPF repetido (pessoa_id),
   valores com vírgula e ponto, texto com ';' e aspas, fundamento de indeferimento.
+  Casos especiais por índice (armadilhas do CLAUDE.md):
+    7  = ausente do arquivo de histórico (histórico indisponível, NÃO estreante);
+    8  = saiu da urna: DS_SITUACAO_CANDIDATO_TOT = #NULO, situação em DS_SITUACAO_JULGAMENTO;
+    9  = ST_DECLARAR_BENS = N e nenhum bem;
+    10 = histórico só com a linha de 2026 (nenhuma candidatura anterior);
+    11 = um bem com valor zero ("0,00").
 """
 import csv, sys, zipfile, io
 from pathlib import Path
@@ -29,11 +35,14 @@ for i in range(N):
     sq = str(190000000000+i); b=base()
     rows["consulta_cand"].append({**b,"CD_CARGO":"7","DS_CARGO":"DEPUTADO ESTADUAL","SQ_CANDIDATO":sq,"NR_CANDIDATO":str(10000+i),"NM_CANDIDATO":f"FULANO {i} DA SILVA","NM_URNA_CANDIDATO":f"FULANO {i}","NM_SOCIAL_CANDIDATO":"#NULO","NR_CPF_CANDIDATO":"111" if i<3 else str(i),"DS_EMAIL":"NÃO DIVULGÁVEL","CD_SITUACAO_CANDIDATURA":"-3","DS_SITUACAO_CANDIDATURA":"#NE","TP_AGREMIACAO":"FEDERAÇÃO","NR_PARTIDO":"13","SG_PARTIDO":"PT","NM_PARTIDO":"PARTIDO DOS TRABALHADORES","NR_FEDERACAO":"101","NM_FEDERACAO":"FE BRASIL","SG_FEDERACAO":"13-PT/65-PC do B/43-PV","SQ_COLIGACAO":"190000001","NM_COLIGACAO":"#NULO","DS_COMPOSICAO_COLIGACAO":"PT/PCdoB/PV","SG_UF_NASCIMENTO":"RJ","DT_NASCIMENTO":"15/03/1970","NR_TITULO_ELEITORAL_CANDIDATO":"999","DS_GENERO":"FEMININO","DS_GRAU_INSTRUCAO":"SUPERIOR COMPLETO","DS_ESTADO_CIVIL":"CASADO(A)","DS_COR_RACA":"PARDA","DS_OCUPACAO":"ADVOGADO","CD_SIT_TOT_TURNO":"-1","DS_SIT_TOT_TURNO":"#NULO"})
     situ = "DEFERIDO" if not (sit=="v2" and i==5) else "INDEFERIDO"
-    rows["consulta_cand_complementar"].append({**b,"SQ_CANDIDATO":sq,"DS_NACIONALIDADE":"BRASILEIRA NATA","NM_MUNICIPIO_NASCIMENTO":"NITERÓI","NR_IDADE_DATA_POSSE":"56","ST_QUILOMBOLA":"N","DS_ETNIA_INDIGENA":"#NULO","VR_DESPESA_MAX_CAMPANHA":"1270629.01","ST_REELEICAO":"#NE","ST_DECLARAR_BENS":"S","NR_PROCESSO":f"0600{i}","ST_CANDIDATO_INSERIDO_URNA":"SIM","NM_TIPO_DESTINACAO_VOTOS":"Válido","DS_SITUACAO_CANDIDATO_TOT":situ,"DS_SITUACAO_JULGAMENTO":situ,"ST_SUBSTITUIDO":"N","SQ_SUBSTITUIDO":"-1"})
-    for j in range(2):
-        rows["bem_candidato"].append({**b,"SQ_CANDIDATO":sq,"NR_ORDEM_BEM_CANDIDATO":str(j+1),"DS_TIPO_BEM_CANDIDATO":"Apartamento","DS_BEM_CANDIDATO":"APTO; \"centro\"","VR_BEM_CANDIDATO":"350000,50" if j==0 else "1200.00","DT_ULT_ATUAL_BEM_CANDIDATO":"18/09/2026"})
+    tot, julg, urna = (("#NULO", "RENÚNCIA", "NÃO") if i == 8 else (situ, situ, "SIM"))
+    rows["consulta_cand_complementar"].append({**b,"SQ_CANDIDATO":sq,"DS_NACIONALIDADE":"BRASILEIRA NATA","NM_MUNICIPIO_NASCIMENTO":"NITERÓI","NR_IDADE_DATA_POSSE":"56","ST_QUILOMBOLA":"N","DS_ETNIA_INDIGENA":"#NULO","VR_DESPESA_MAX_CAMPANHA":"1270629.01","ST_REELEICAO":"#NE","ST_DECLARAR_BENS":"N" if i == 9 else "S","NR_PROCESSO":f"0600{i}","ST_CANDIDATO_INSERIDO_URNA":urna,"NM_TIPO_DESTINACAO_VOTOS":"Válido","DS_SITUACAO_CANDIDATO_TOT":tot,"DS_SITUACAO_JULGAMENTO":julg,"ST_SUBSTITUIDO":"N","SQ_SUBSTITUIDO":"-1"})
+    for j in range(0 if i == 9 else 2):
+        v = "350000,50" if j == 0 else ("0,00" if i == 11 else "1200.00")
+        rows["bem_candidato"].append({**b,"SQ_CANDIDATO":sq,"NR_ORDEM_BEM_CANDIDATO":str(j+1),"DS_TIPO_BEM_CANDIDATO":"Apartamento","DS_BEM_CANDIDATO":"APTO; \"centro\"","VR_BEM_CANDIDATO":v,"DT_ULT_ATUAL_BEM_CANDIDATO":"18/09/2026"})
     rows["rede_social_candidato"].append({**b,"AA_ELEICAO":"2026","SQ_CANDIDATO":sq,"NR_ORDEM_REDE_SOCIAL":"1","DS_URL":f"https://www.instagram.com/fulano{i}"})
-    for ano,res in [(2026,"#NULO"),(2022,"Eleito por QP"),(2018,"Suplente")]:
+    hist = [] if i == 7 else [(2026,"#NULO")] if i == 10 else [(2026,"#NULO"),(2022,"Eleito por QP"),(2018,"Suplente")]
+    for ano,res in hist:
         rows["historico_candidatura"].append({**b,"ANO_ELEICAO_ATUAL":"2026","SQ_CANDIDATO_ATUAL":sq,"SG_UF_ATUAL":"RJ","ANO_ELEICAO":str(ano),"TP_ABRANGENCIA_ELEICAO":"E","CD_CARGO":"7","DS_CARGO":"Deputado Estadual","SQ_CANDIDATO":str(int(sq)-ano),"NR_CANDIDATO":"1","NM_CANDIDATO":"X","NM_URNA_CANDIDATO":"X","NR_PARTIDO":"13","SG_PARTIDO":"PT","NM_PARTIDO":"PT","DS_SITUACAO_CANDIDATURA":"Apto","DS_SITUACAO_JULGAMENTO":"Deferido","CD_SIT_TOT_TURNO":"1","DS_SIT_TOT_TURNO":res})
 rows["motivo_cassacao"].append({**base(),"SQ_CANDIDATO":"190000000005","NR_PROCESSO":"-1","DS_TP_MOTIVO":"Fundamentos legais de julgamento","DS_MOTIVO":"Ausência de quitação eleitoral (Lei 9.504/97)"})
 rows["consulta_vagas"].append({**base(),"DT_POSSE":"01/02/2027","CD_CARGO":"7","DS_CARGO":"Deputado Estadual","QT_VAGA":"70"})

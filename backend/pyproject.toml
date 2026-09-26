@@ -1,0 +1,25 @@
+[project]
+name = "eleicoes-backend"
+version = "0.1.0"
+description = "API do Laboratório de Análise Eleitoral — Eleições 2026 (dados abertos do TSE)"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    "duckdb>=1.1",
+    "pandas>=2.1",
+    "openpyxl>=3.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = []

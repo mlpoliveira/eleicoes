@@ -6,6 +6,8 @@
 *.duckdb.wal
 *.zip
 *.csv
+# exceção: mapa versionado de categorias de bens (T4)
+!ingestao/categorias_bens.csv
 _extraido/
 
 # Relatórios gerados
@@ -14,3 +16,5 @@ inventario_tse.json
 # Python
 __pycache__/
 .venv/
+.pytest_cache/
+*.egg-info/
