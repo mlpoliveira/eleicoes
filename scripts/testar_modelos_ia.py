@@ -20,10 +20,10 @@ from app.config import carregar_env  # noqa: E402
 from app.ia.cliente import ClienteOpenAICompativel, ErroIA  # noqa: E402
 from app.ia.ferramentas import DEFINICOES  # noqa: E402
 
+# Resultado em 26/09/2026: todos OK, exceto kimi-k2.6 (404 na conta, apesar de listado).
 CANDIDATOS = [
-    "moonshotai/kimi-k2.6",
-    "z-ai/glm-5.3",
     "nvidia/nemotron-3-super-120b-a12b",
+    "z-ai/glm-5.3",
     "deepseek-ai/deepseek-v4.1-flash",
     "mistralai/mistral-nemotron",
     "openai/gpt-oss-20b",

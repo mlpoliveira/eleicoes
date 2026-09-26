@@ -22,7 +22,7 @@ class ClienteIA(Protocol):
         """Devolve a mensagem do assistente: {"content": str|None, "tool_calls": [...]|None}."""
 
 
-MODELO_PADRAO = "moonshotai/kimi-k2.6"  # confirmar com scripts/testar_modelos_ia.py
+MODELO_PADRAO = "nvidia/nemotron-3-super-120b-a12b"  # testado em 26/09/2026 (scripts/testar_modelos_ia.py)
 
 
 class ErroIA(Exception):
