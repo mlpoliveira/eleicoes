@@ -38,8 +38,14 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
 - `ingestao/ingestao_tse.py`: carga versionada em DuckDB (`eleicoes.duckdb`). Uso:
   `python ingestao/ingestao_tse.py "<pasta dos zips>"`. Rodar de novo com nova geração do TSE
   cria nova carga e registra diferenças em `alteracao`.
-- Estrutura: `ingestao/`, `backend/` (só `pyproject.toml` por enquanto), `frontend/`, `tests/`, `docs/`
+- Estrutura: `ingestao/`, `backend/`, `frontend/` (vazio), `tests/`, `docs/`
   (`docs/inventario_tse.md` = saída do inventário).
+- API (`backend/app/`): `ELEICOES_DB=eleicoes.duckdb uvicorn app.main:app --app-dir backend`.
+  `db.py` (conexão read-only, cursor por requisição), `metadados.py` (natureza + fonte TSE de cada
+  campo exposto), `rotas/candidatos.py` (`GET /api/candidatos`, `GET /api/filtros`).
+  A busca normaliza nome e termo (minúsculas, sem acento, sem pontuação); correspondência
+  "exata" (trecho) vem antes da "aproximada" (Jaro-Winkler >= 0,90 por palavra de 4+ letras).
+  A API trava o arquivo do DuckDB: pare-a antes de rodar nova carga.
 - Testes: `pip install -e "backend[dev]"` e `pytest` na raiz. Fixtures em `tests/conftest.py`
   (`banco_v1` = 1 carga; `banco_v2` = cargas v1+v2 no mesmo banco). O gerador sintético cobre as
   armadilhas abaixo (casos por índice documentados no topo de `tests/gerar_dados_sinteticos.py`).

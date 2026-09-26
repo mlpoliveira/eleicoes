@@ -71,3 +71,11 @@ def con_v2(banco_v2):
     con = duckdb.connect(str(banco_v2), read_only=True)
     yield con
     con.close()
+
+
+@pytest.fixture(scope="session")
+def cliente(banco_v1):
+    from fastapi.testclient import TestClient
+    from app.main import criar_app
+    with TestClient(criar_app(banco_v1)) as c:
+        yield c
