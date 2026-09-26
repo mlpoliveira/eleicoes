@@ -8,6 +8,7 @@ import { MAX_COMPARAR, useComparacao } from "@/lib/comparacao";
 import { Alertas, Cartao, Carregando, Erro } from "@/components/Estado";
 import { SeloNatureza } from "@/components/SeloNatureza";
 import { VerFonte } from "@/components/VerFonte";
+import { Exportar } from "@/components/Exportar";
 
 interface Linha {
   secao: string;
@@ -159,6 +160,7 @@ export default function PaginaComparar() {
       {comp.lista.length >= 2 && !dados && !erro && <Carregando />}
       {dados && (
         <>
+          <div className="flex justify-end"><Exportar caminho="comparar" params={{ sq: chave }} /></div>
           <Alertas itens={dados.alertas} />
           <div className="flex flex-wrap gap-2 text-xs">
             {Object.entries(dados.verificacoes).map(([k, v]) => (

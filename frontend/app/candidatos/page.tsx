@@ -9,6 +9,7 @@ import { useComparacao } from "@/lib/comparacao";
 import { Carregando, Erro } from "@/components/Estado";
 import { SelectFiltro, SelectSimNao } from "@/components/Filtro";
 import { SeloNatureza } from "@/components/SeloNatureza";
+import { Exportar } from "@/components/Exportar";
 
 const POR_PAGINA = 50;
 const FILTROS = ["uf", "cd_cargo", "sg_partido", "federacao", "situacao", "genero", "cor_raca", "grau_instrucao"] as const;
@@ -158,7 +159,8 @@ function Busca() {
               <span className="ml-2"><SeloNatureza natureza="DADO" /></span>
               <span className="ml-1 text-xs text-texto-3">geração TSE {res.geracao_tse}</span>
             </span>
-            {res.consulta.criterio_busca && <span className="max-w-3xl text-xs text-texto-3">Critério: {res.consulta.criterio_busca}</span>}
+            <Exportar caminho="candidatos" params={Object.fromEntries([...new URLSearchParams(chave)].filter(([k]) => k !== "pagina"))} />
+            {res.consulta.criterio_busca && <span className="w-full text-xs text-texto-3">Critério: {res.consulta.criterio_busca}</span>}
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">

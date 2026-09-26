@@ -7,6 +7,7 @@ import { Alertas, Carregando, Erro } from "@/components/Estado";
 import { SelectFiltro, SelectSimNao } from "@/components/Filtro";
 import { FiguraGrafico } from "@/components/FiguraGrafico";
 import { BarrasHorizontais, Histograma } from "@/components/Barras";
+import { Exportar } from "@/components/Exportar";
 
 const FONTE = "TSE — Dados Abertos, candidatos 2026";
 
@@ -68,9 +69,13 @@ export default function Inicio() {
       {!est && !erro && <Carregando />}
       {est && (
         <>
-          <p className="text-sm text-texto-2">
-            Universo: <b className="text-texto">{est.universo.descricao}</b> · n = {numero(n)}
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-sm text-texto-2">
+              Universo: <b className="text-texto">{est.universo.descricao}</b> · n = {numero(n)}
+            </p>
+            <Exportar caminho="estatisticas" params={{ uf, cd_cargo: cargo, na_urna: naUrna, metrica: "total_bens",
+              categoricas: ["cd_cargo", "na_urna", "historico_disponivel", "genero", "cor_raca", "grau_instrucao", "faixa_etaria"] }} />
+          </div>
           <Alertas itens={est.universo.alertas} />
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">

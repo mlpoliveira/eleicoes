@@ -68,6 +68,12 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
   verificação na ingestão exige explicação, há teste) e `GET /api/alteracoes[?carga_id=&campo=&uf=&cd_cargo=]`
   (resumo por campo, transições de situação, itens; candidato removido usa dados da carga anterior).
   Telas `/qualidade` e `/alteracoes` no frontend.
+- T8: `exportar.py` (CSV UTF-8 com BOM, `;`, vírgula decimal, metadados em linhas `# chave;valor`,
+  tabelas após `## nome`; Excel com aba `metadados` + uma aba por tabela + `campos`) e
+  `rotas/exportar.py` (`GET /api/exportar/{candidatos|comparar|estatisticas}?formato=csv|xlsx` + os
+  mesmos parâmetros da tela). As rotas chamam as funções das rotas de consulta — exportação nunca
+  diverge da tela. Ausência = texto "não disponível no dataset utilizado"; pessoa_id nunca sai.
+  Botões "Exportar: CSV | Excel" na busca, no comparador e no início (`components/Exportar.tsx`).
 - Teste de neutralidade automatizado em `tests/test_api_comparar.py` (regex de termos avaliativos
   sobre o texto gerado; valores vindos da base são retirados antes). Gerador `v3` = v1 + candidatos
   em outro cargo (40) e outra UF (41).
