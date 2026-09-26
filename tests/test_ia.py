@@ -255,3 +255,25 @@ def test_script_de_teste_de_modelos(monkeypatch):
     assert tm.testar(ok) == ("OK", 'search_candidates({"q": "Maria da Silva", "uf": "RJ"})')
     sem = ModeloRoteirizado([{"content": "Não sei."}])
     assert tm.testar(sem)[0] == "NÃO chamou ferramenta"
+
+
+def test_links_para_as_telas(ia):
+    cliente, _, _ = ia([
+        chamada("search_candidates", uf="rj", cd_cargo=7, ordenar_por="nm_urna", ordem="asc", limite=20),
+        chamada("get_candidate", sq=SQ + 12),
+        final("Há 40 candidaturas a Deputado Estadual no RJ (n = 40)."),
+    ])
+    r = perguntar(cliente, "Quais os candidatos a deputado estadual no RJ? Liste eles")
+    assert r["links"] == [
+        {"rotulo": "Ver os 40 registros na busca",
+         "href": "/candidatos?uf=RJ&cd_cargo=7&ordenar_por=nm_urna&ordem=asc"},
+        {"rotulo": "Página de CONCEIÇÃO ARAÚJO", "href": f"/candidatos/{SQ + 12}"},
+    ]
+
+
+def test_prompt_pede_lista_curta_e_linguagem_simples(ia):
+    cliente, modelo, _ = ia([final("ok")])
+    perguntar(cliente, "Liste os candidatos do RJ")
+    sistema = modelo.recebido[0]["mensagens"][0]["content"]
+    assert "Nunca liste mais de 10 itens" in sistema
+    assert "Não mencione ferramentas, parâmetros" in sistema

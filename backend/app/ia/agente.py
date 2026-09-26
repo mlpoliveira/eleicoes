@@ -13,6 +13,7 @@ import os
 import re
 import time
 from datetime import datetime
+from urllib.parse import urlencode
 from pathlib import Path
 
 from ..db import RAIZ, carga_atual
@@ -41,11 +42,20 @@ REGRAS OBRIGATÓRIAS
 5. Não infira personalidade, caráter, honestidade, saúde, religião, orientação sexual ou intenções.
 6. Cite a geração TSE dos dados usados. Valores em reais: escreva "R$" com vírgula decimal.
 7. Se a pergunta for ambígua (ex.: nome com vários resultados), diga quais registros encontrou.
+8. Pedidos de lista: comece pelo total ("Há 793 candidaturas a ..."). Mostre no máximo 10 exemplos,
+   um por linha, no formato "- NOME DE URNA (PARTIDO, nº NÚMERO)", e diga que a lista completa
+   está no link abaixo da resposta (o link é gerado automaticamente; não escreva endereços).
+   Nunca liste mais de 10 itens.
+9. Escreva para o público em geral, em frases curtas. Não mencione ferramentas, parâmetros,
+   JSON, arrays, campos técnicos, limites de consulta ou paginação — nem na resposta, nem no
+   critério, nem no cálculo. Ex. de cálculo: "Contagem das candidaturas a Deputado Federal no RJ
+   registradas no TSE."
 
-FORMATO DA RESPOSTA FINAL (depois de usar as ferramentas): somente um objeto JSON, sem texto fora dele:
-{"criterio": "como a pergunta foi interpretada e quais filtros/universo foram usados",
- "resposta": "resposta factual, curta, citando números, universo e n",
- "calculo": "como os números foram obtidos (ferramentas e medidas usadas) ou vazio"}"""
+FORMATO DA RESPOSTA FINAL (depois de usar as ferramentas): somente um objeto JSON, sem texto fora dele
+(use \n para quebrar linhas dentro dos textos):
+{"criterio": "como a pergunta foi interpretada: universo e filtros, em linguagem simples",
+ "resposta": "resposta factual e curta, citando números, universo e n",
+ "calculo": "como os números foram obtidos, em linguagem simples, ou vazio"}"""
 
 
 def _sem_raciocinio(texto: str) -> str:
@@ -68,6 +78,26 @@ def _extrair_json(texto: str) -> dict | None:
         if isinstance(dados, dict) and "resposta" in dados:
             return dados
     return None
+
+
+def _links(nome: str, args: dict, resultado: dict) -> list[dict]:
+    """Links para as telas do laboratório, gerados a partir das consultas (não do texto da IA)."""
+    if "erro" in resultado:
+        return []
+    if nome == "search_candidates":
+        params = {k: args[k] for k in ("q", "uf", "cd_cargo", "sg_partido", "situacao", "genero",
+                                       "ordenar_por", "ordem") if args.get(k) not in (None, "")}
+        if "uf" in params:
+            params["uf"] = str(params["uf"]).upper()
+        total = resultado.get("total", 0)
+        rotulo = f"Ver {'o registro' if total == 1 else f'os {total:,} registros'.replace(',', '.')} na busca"
+        return [{"rotulo": rotulo, "href": "/candidatos" + (f"?{urlencode(params)}" if params else "")}]
+    if nome in ("get_candidate", "get_candidate_assets", "get_candidate_history", "get_candidate_position"):
+        sq = args.get("sq")
+        ident = resultado.get("identificacao") or {}
+        nome_urna = ident.get("nm_urna") or f"candidatura {sq}"
+        return [{"rotulo": f"Página de {nome_urna}", "href": f"/candidatos/{int(sq)}"}] if sq else []
+    return []
 
 
 def _registrar(entrada: dict):
@@ -96,13 +126,13 @@ def perguntar(pergunta: str, cliente: ClienteIA | None, cur) -> dict:
         log.update(recusa=recusa["motivo"], duracao_s=round(time.time() - inicio, 2))
         _registrar(log)
         return {**base, "natureza": "CONTEXTO", "recusada": True, "recusa": recusa,
-                "criterio": None, "resposta": None, "calculo": None, "dados_usados": []}
+                "criterio": None, "resposta": None, "calculo": None, "dados_usados": [], "links": []}
     if cliente is None:
         raise RuntimeError("IA não configurada")
 
     mensagens = [{"role": "system", "content": PROMPT_SISTEMA},
                  {"role": "user", "content": pergunta}]
-    dados_usados, valores_base, final = [], set(), None
+    dados_usados, valores_base, final, links = [], set(), None, []
     for _ in range(MAX_RODADAS):
         msg = cliente.completar(mensagens, ferramentas.DEFINICOES)
         chamadas = msg.get("tool_calls") or []
@@ -119,6 +149,9 @@ def perguntar(pergunta: str, cliente: ClienteIA | None, cur) -> dict:
                 args = {}
             resultado = ferramentas.executar(nome, args, cur)
             dados_usados.append({"ferramenta": nome, "argumentos": args, "resultado": resultado})
+            for link in _links(nome, args, resultado):
+                if link["href"] not in {l["href"] for l in links}:
+                    links.append(link)
             valores_base |= ferramentas.strings_da_base(resultado)
             log["ferramentas"].append({"nome": nome, "argumentos": args, "erro": resultado.get("erro")})
             mensagens.append({"role": "tool", "tool_call_id": ch.get("id", nome),
@@ -152,4 +185,4 @@ def perguntar(pergunta: str, cliente: ClienteIA | None, cur) -> dict:
     _registrar(log)
     return {**base, "recusada": False, "recusa": None,
             "criterio": saida.get("criterio"), "resposta": saida.get("resposta"),
-            "calculo": saida.get("calculo"), "dados_usados": dados_usados}
+            "calculo": saida.get("calculo"), "dados_usados": dados_usados, "links": links}

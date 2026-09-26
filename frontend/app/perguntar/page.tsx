@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Cartao, Erro } from "@/components/Estado";
@@ -16,6 +17,7 @@ interface Resposta {
   resposta: string | null;
   calculo: string | null;
   dados_usados: { ferramenta: string; argumentos: Record<string, unknown>; resultado: Record<string, unknown> }[];
+  links?: { rotulo: string; href: string }[];
 }
 
 const FERRAMENTAS: Record<string, string> = {
@@ -115,6 +117,16 @@ export default function PaginaPerguntar() {
               <h2 className="text-base font-semibold">Resposta</h2><SeloNatureza natureza="ANALISE" />
             </div>
             <p className="whitespace-pre-wrap text-sm leading-relaxed">{r.resposta}</p>
+            {r.links && r.links.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {r.links.map((l) => (
+                  <Link key={l.href} href={l.href}
+                    className="rounded border border-borda bg-superficie-2 px-3 py-1 text-sm text-destaque hover:underline">
+                    {l.rotulo} →
+                  </Link>
+                ))}
+              </div>
+            )}
             <p className="mt-3 text-xs text-texto-3">{r.aviso} Base: geração TSE {r.geracao_tse}.</p>
           </Cartao>
           {r.criterio && (
