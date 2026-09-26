@@ -10,10 +10,11 @@ from pathlib import Path
 from fastapi import FastAPI
 
 from .db import Banco, caminho_banco
-from .rotas import bens, candidato, candidatos, carga, comparar, estatisticas, exportar, qualidade
+from .ia.cliente import ClienteIA, cliente_do_ambiente
+from .rotas import bens, candidato, candidatos, carga, comparar, estatisticas, exportar, perguntar, qualidade
 
 
-def criar_app(banco: Path | None = None) -> FastAPI:
+def criar_app(banco: Path | None = None, ia_cliente: ClienteIA | None = None) -> FastAPI:
     @asynccontextmanager
     async def ciclo(app: FastAPI):
         yield
@@ -24,6 +25,7 @@ def criar_app(banco: Path | None = None) -> FastAPI:
                               "não faz recomendação de voto nem classificação de candidatos.",
                   lifespan=ciclo)
     app.state.banco = Banco(banco or caminho_banco())
+    app.state.ia_cliente = ia_cliente if ia_cliente is not None else cliente_do_ambiente()
     app.include_router(estatisticas.router)
     app.include_router(candidatos.router)
     app.include_router(candidato.router)
@@ -32,6 +34,7 @@ def criar_app(banco: Path | None = None) -> FastAPI:
     app.include_router(carga.router)
     app.include_router(qualidade.router)
     app.include_router(exportar.router)
+    app.include_router(perguntar.router)
     return app
 
 

@@ -74,6 +74,15 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
   mesmos parâmetros da tela). As rotas chamam as funções das rotas de consulta — exportação nunca
   diverge da tela. Ausência = texto "não disponível no dataset utilizado"; pessoa_id nunca sai.
   Botões "Exportar: CSV | Excel" na busca, no comparador e no início (`components/Exportar.tsx`).
+- T10 "Pergunte aos dados": `backend/app/ia/` — `cliente.py` (chat/completions formato OpenAI; padrão
+  API da NVIDIA: `NVIDIA_API_KEY`, `IA_BASE_URL`=https://integrate.api.nvidia.com/v1,
+  `IA_MODELO`=meta/llama-3.3-70b-instruct — precisa suportar tool calling; cliente injetável em
+  `criar_app(ia_cliente=...)`), `ferramentas.py` (10 ferramentas = funções das rotas, respostas enxutas),
+  `neutralidade.py` (recusa ANTES do modelo: voto, melhores/piores/ranking, inferências pessoais;
+  checagem de termos avaliativos DEPOIS, com 1 reescrita, senão resposta retida), `agente.py` (prompt
+  com as regras, até 6 rodadas, resposta JSON {criterio, resposta, calculo}, log em `logs/ia.jsonl`
+  — fora do Git). Rota `POST /api/perguntar` (+ `GET /api/perguntar/status`); sem chave → 503.
+  Tela `/perguntar`. Testes com modelo roteirizado (`tests/test_ia.py`), nunca chamam serviço externo.
 - Teste de neutralidade automatizado em `tests/test_api_comparar.py` (regex de termos avaliativos
   sobre o texto gerado; valores vindos da base são retirados antes). Gerador `v3` = v1 + candidatos
   em outro cargo (40) e outra UF (41).
