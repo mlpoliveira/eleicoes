@@ -242,14 +242,15 @@ SELECT SQ_COLIGACAO::BIGINT AS sq_coligacao, SG_UF AS sg_uf, CD_CARGO::INT AS cd
        DS_SITUACAO AS situacao_legenda, _arquivo AS fonte_arquivo, _linha AS fonte_linha
 FROM raw_consulta_coligacao WHERE _carga_id = $carga;
 
--- Visão de trabalho do app: candidato + totais derivados
-CREATE OR REPLACE VIEW v_candidato AS
+-- Tabela de trabalho do app: candidato + totais derivados. Materializada (não é VIEW) porque só
+-- muda a cada carga e a agregação do histórico é cara para recalcular a cada consulta da API.
+CREATE OR REPLACE TABLE v_candidato AS
 SELECT c.*,
        b.qt_bens, b.total_bens,
        h.sq_hist IS NOT NULL AS historico_disponivel,   -- FALSE = sem dado, NÃO "nunca concorreu"
        h.qt_candidaturas_anteriores, h.qt_vezes_eleito, h.ultimo_cargo_eleito,
-       (SELECT count(*) FROM candidato o WHERE o.pessoa_id = c.pessoa_id
-          AND o.sq_candidato <> c.sq_candidato) AS qt_outros_registros_2026
+       CASE WHEN c.pessoa_id IS NULL THEN 0
+            ELSE count(*) OVER (PARTITION BY c.pessoa_id) - 1 END AS qt_outros_registros_2026
 FROM candidato c
 LEFT JOIN (SELECT sq_candidato, count(*) qt_bens, sum(valor) total_bens
            FROM bem GROUP BY 1) b USING (sq_candidato)
@@ -404,6 +405,11 @@ def main():
         for prefixo, df in dfs.items():
             gravar_raw(con, f"raw_{prefixo}", df, carga)
         con.execute(MACROS)
+        # bancos antigos têm v_candidato como VIEW; agora é tabela materializada
+        tipo = con.execute("SELECT table_type FROM information_schema.tables "
+                           "WHERE table_name = 'v_candidato'").fetchone()
+        if tipo and tipo[0] == "VIEW":
+            con.execute("DROP VIEW v_candidato")
         carregar_categorias(con, Path(args.categorias))
         con.execute(MODELO.replace("$carga", str(carga)))
         n_alt = registrar_alteracoes(con, carga)

@@ -88,10 +88,10 @@ def test_filtros(cliente):
     assert buscar(cliente, cd_cargo=6)["total"] == 0
     assert sqs(buscar(cliente, na_urna="false")) == [SQ + 8]
     assert sqs(buscar(cliente, situacao="RENÚNCIA")) == [SQ + 8]
-    assert buscar(cliente, idade_min=56, idade_max=56)["total"] == 40
-    assert buscar(cliente, idade_min=57)["total"] == 0
+    assert buscar(cliente, idade_min=40, idade_max=49)["total"] == 10   # idade = 30 + índice
+    assert buscar(cliente, idade_min=70)["total"] == 0
     assert buscar(cliente, genero="FEMININO", cor_raca="PARDA",
-                  grau_instrucao="SUPERIOR COMPLETO", federacao="FE BRASIL")["total"] == 40
+                  grau_instrucao="SUPERIOR COMPLETO", federacao="FE BRASIL")["total"] == 26
 
 
 def test_filtro_com_varios_valores(cliente):
@@ -172,7 +172,7 @@ def test_filtros_disponiveis(cliente):
     assert f["sg_partido"]["valores"][0]["rotulo"] == "PARTIDO DOS TRABALHADORES"
     assert {v["valor"]: v["n"] for v in f["situacao"]["valores"]} == {"DEFERIDO": 39, "RENÚNCIA": 1}
     assert {v["valor"]: v["n"] for v in f["na_urna"]["valores"]} == {True: 39, False: 1}
-    assert f["idade"] == {"coluna": "idade_na_posse", "min": 56, "max": 56, "n_nao_disponivel": 0}
+    assert f["idade"] == {"coluna": "idade_na_posse", "min": 30, "max": 69, "n_nao_disponivel": 0}
 
 
 def test_banco_inexistente(tmp_path):

@@ -45,7 +45,12 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
   campo exposto), `rotas/candidatos.py` (`GET /api/candidatos`, `GET /api/filtros`),
   `rotas/candidato.py` (`GET /api/candidatos/{sq}` com seções, cada campo com natureza + fonte;
   `GET /api/fonte?tabela=&sq=&campo=[&nr_ordem=|&linha=]` devolve arquivo, linha e o texto
-  original do CSV lido das tabelas `raw_*`), `rotas/bens.py` (`GET /api/categorias-bens`).
+  original do CSV lido das tabelas `raw_*`), `rotas/bens.py` (`GET /api/categorias-bens`),
+  `rotas/estatisticas.py` (`GET /api/estatisticas`, `GET /api/estatisticas/metricas`,
+  `GET /api/candidatos/{sq}/posicao`). `universo.py` define o recorte (filtros comuns à busca e às
+  estatísticas), gera a descrição em texto e os alertas (cargos/UFs misturados, n < 30).
+  Estatísticas: registros sem o dado ficam fora do cálculo e são contados em `n_sem_dado` com o
+  motivo; posição do candidato = percentil (posição média) + relação com a mediana, nunca "nº X de Y".
 - Categorias de bens: mapa versionado `ingestao/categorias_bens.csv` (tipo;categoria;observacao,
   UTF-8) carregado na ingestão como tabela `categoria_bem`; `bem.categoria` é CÁLCULO. Tipo fora do
   mapa fica com categoria NULL e é medido em `qualidade`. Mudou o mapa? Rodar a ingestão com `--forcar`.
@@ -74,7 +79,7 @@ Tabelas finais (reconstruídas a partir da última carga):
 - `historico` (sq_candidato_atual → candidaturas desde 2004, com `eleito`, resultado, cargo, partido)
 - `fundamento_indeferimento` (vem do arquivo `motivo_cassacao` do TSE — ver armadilhas)
 - `vaga` (sg_uf, cd_cargo, qt_vaga), `coligacao`
-- View `v_candidato`: candidato + `qt_bens`, `total_bens`, `historico_disponivel`,
+- `v_candidato` (TABELA materializada na ingestão — antes era VIEW): candidato + `qt_bens`, `total_bens`, `historico_disponivel`,
   `qt_candidaturas_anteriores`, `qt_vezes_eleito`, `ultimo_cargo_eleito`, `qt_outros_registros_2026`.
 
 ## Armadilhas já descobertas nos dados do TSE (não redescobrir)

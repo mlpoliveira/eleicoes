@@ -10,7 +10,7 @@ from pathlib import Path
 from fastapi import FastAPI
 
 from .db import Banco, caminho_banco
-from .rotas import bens, candidato, candidatos
+from .rotas import bens, candidato, candidatos, estatisticas
 
 
 def criar_app(banco: Path | None = None) -> FastAPI:
@@ -24,6 +24,7 @@ def criar_app(banco: Path | None = None) -> FastAPI:
                               "não faz recomendação de voto nem classificação de candidatos.",
                   lifespan=ciclo)
     app.state.banco = Banco(banco or caminho_banco())
+    app.include_router(estatisticas.router)
     app.include_router(candidatos.router)
     app.include_router(candidato.router)
     app.include_router(bens.router)

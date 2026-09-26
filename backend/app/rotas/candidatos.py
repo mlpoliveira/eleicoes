@@ -20,6 +20,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from ..db import carga_atual, consultar
 from ..dependencias import cursor
 from ..metadados import DATASET, bloco_campos
+from ..universo import Universo, universo_dos_parametros
 
 router = APIRouter(prefix="/api", tags=["candidatos"])
 
@@ -56,49 +57,18 @@ def normalizar(texto: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", sem_acento).strip()
 
 
-def _filtro_lista(where, params, coluna, valores):
-    valores = [v for v in (valores or []) if v not in (None, "")]
-    if valores:
-        where.append(f"{coluna} IN ({', '.join('?' * len(valores))})")
-        params.extend(valores)
-
-
 @router.get("/candidatos")
 def buscar_candidatos(
     q: str | None = Query(None, max_length=120,
                           description="Nome completo, nome de urna, nome social ou número"),
-    uf: list[str] | None = Query(None),
-    cd_cargo: list[int] | None = Query(None),
-    sg_partido: list[str] | None = Query(None),
-    federacao: list[str] | None = Query(None, description="nome da federação"),
-    situacao: list[str] | None = Query(None, description="situação da candidatura"),
-    genero: list[str] | None = Query(None),
-    cor_raca: list[str] | None = Query(None),
-    grau_instrucao: list[str] | None = Query(None),
-    idade_min: int | None = Query(None, ge=0, le=130),
-    idade_max: int | None = Query(None, ge=0, le=130),
-    na_urna: bool | None = None,
+    universo: Universo = Depends(universo_dos_parametros),
     pagina: int = Query(1, ge=1),
     por_pagina: int = Query(50, ge=1, le=200),
     ordenar_por: Literal[tuple(ORDENAVEIS)] = "nm_urna",
     ordem: Literal["asc", "desc"] = "asc",
     cur=Depends(cursor),
 ):
-    where, params = [], []
-    _filtro_lista(where, params, "sg_uf", [u.upper() for u in (uf or [])])
-    _filtro_lista(where, params, "cd_cargo", cd_cargo)
-    _filtro_lista(where, params, "sg_partido", sg_partido)
-    _filtro_lista(where, params, "nm_federacao", federacao)
-    _filtro_lista(where, params, "situacao_candidatura", situacao)
-    _filtro_lista(where, params, "genero", genero)
-    _filtro_lista(where, params, "cor_raca", cor_raca)
-    _filtro_lista(where, params, "grau_instrucao", grau_instrucao)
-    if idade_min is not None:
-        where.append("idade_na_posse >= ?"); params.append(idade_min)
-    if idade_max is not None:
-        where.append("idade_na_posse <= ?"); params.append(idade_max)
-    if na_urna is not None:
-        where.append("na_urna = ?"); params.append(na_urna)
+    where, params = universo.where()
 
     # ---- termo de busca
     # params_select: usados na expressão de correspondência (SELECT); params: usados no WHERE
