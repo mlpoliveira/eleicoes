@@ -194,3 +194,56 @@ def test_qualidade_por_carga(con_v2):
 def test_booleano_ausente_continua_nulo(con_v1):
     assert linha(con_v1, SQ + 13)["quilombola"] is None
     assert linha(con_v1, SQ)["quilombola"] is False
+
+
+# ---------------------------------------------------------------- histórico com 2º turno
+def test_historico_conta_uma_candidatura_por_turno(con_v1):
+    """Arquivo tem 2 linhas (turno 1 = '2º turno', turno 2 = 'Eleito'): conta 1 candidatura eleita."""
+    assert um(con_v1, "SELECT count(*) FROM historico WHERE sq_candidato_atual = ? "
+                      "AND ano_eleicao = 2020", [SQ + 15]) == 2
+    c = linha(con_v1, SQ + 15)
+    assert c["qt_candidaturas_anteriores"] == 1
+    assert c["qt_vezes_eleito"] == 1
+    assert c["ultimo_cargo_eleito"] == "Prefeito (2020)"
+    assert um(con_v1, "SELECT quantidade FROM qualidade WHERE carga_id = 1 AND verificacao LIKE "
+                      "'linhas do histórico que repetem uma candidatura%'") == 1
+
+
+# ---------------------------------------------------------------- categorias de bens (T4)
+def test_categoria_de_bem(con_v1):
+    cats = dict(con_v1.execute("SELECT tipo, categoria FROM bem WHERE sq_candidato = ?",
+                               [SQ + 14]).fetchall())
+    assert cats == {"Veículo automotor terrestre: caminhão, automóvel, moto, etc.": "Veículos",
+                    "Tipo novo fora do mapa": None}
+    assert um(con_v1, "SELECT DISTINCT categoria FROM bem WHERE tipo = 'Apartamento'") == "Imóveis"
+
+
+def test_tipo_fora_do_mapa_medido(con_v1):
+    q = dict(con_v1.execute("SELECT verificacao, quantidade FROM qualidade "
+                            "WHERE carga_id = 1").fetchall())
+    assert q["tipos de bem sem categoria no mapa (ingestao/categorias_bens.csv)"] == 1
+    assert q["bens sem categoria no mapa"] == 1
+
+
+def test_mapa_de_categorias_versionado():
+    """O CSV cobre os 49 tipos do banco real (26/09/2026), sem repetição, só com as 6 categorias."""
+    import pandas as pd
+    from conftest import RAIZ
+    m = pd.read_csv(RAIZ / "ingestao" / "categorias_bens.csv", sep=";", dtype=str,
+                    keep_default_na=False)
+    assert list(m.columns) == ["tipo", "categoria", "observacao"]
+    assert len(m) == 49
+    assert not m["tipo"].str.lower().duplicated().any()
+    assert set(m["categoria"]) == {"Imóveis", "Veículos", "Aplicações financeiras",
+                                   "Participações societárias", "Depósitos/dinheiro", "Outros"}
+
+
+def test_mapa_invalido_interrompe_carga(tmp_path, dados_v1):
+    import subprocess, sys
+    from conftest import INGESTAO
+    mapa = tmp_path / "mapa.csv"
+    mapa.write_text("tipo;categoria\nCasa;Imóveis\ncasa;Outros\n", encoding="utf-8")
+    r = subprocess.run([sys.executable, str(INGESTAO), str(dados_v1), "--banco",
+                        str(tmp_path / "e.duckdb"), "--categorias", str(mapa)],
+                       capture_output=True, text=True, encoding="utf-8")
+    assert r.returncode != 0 and "tipo repetido" in r.stderr

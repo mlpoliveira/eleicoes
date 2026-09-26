@@ -38,6 +38,9 @@ SECOES = {
 TEXTO_HISTORICO_INDISPONIVEL = (
     "Histórico não disponível no dataset utilizado: este registro não aparece no arquivo "
     "historico_candidatura do TSE. Isso não significa que a pessoa nunca tenha concorrido.")
+TEXTO_TURNOS = (
+    "O arquivo de histórico do TSE tem uma linha por turno: candidaturas com 2º turno aparecem "
+    "duas vezes na linha do tempo. As contagens consideram uma candidatura por ano, cargo e local.")
 TEXTO_FUNDAMENTOS = (
     "Fundamentos legais registrados pelo TSE no julgamento do pedido de registro de candidatura "
     "(arquivo motivo_cassacao — apesar do nome, o conteúdo são fundamentos de indeferimento, não "
@@ -77,6 +80,9 @@ def detalhe_candidato(sq: int, cur=Depends(cursor)):
 
     # ---- patrimônio
     bens = _itens(cur, "bem", "sq_candidato = ?", [sq], "nr_ordem")
+    por_categoria = consultar(cur, """
+        SELECT categoria, count(*) AS qt, sum(valor) AS total FROM bem WHERE sq_candidato = ?
+        GROUP BY categoria ORDER BY categoria NULLS LAST""", [sq])
     por_tipo = consultar(cur, """
         SELECT tipo, count(*) AS qt, sum(valor) AS total FROM bem WHERE sq_candidato = ?
         GROUP BY tipo ORDER BY tipo""", [sq])
@@ -89,6 +95,13 @@ def detalhe_candidato(sq: int, cur=Depends(cursor)):
         "mensagem": None if bens else
             "Nenhum bem deste candidato no arquivo bem_candidato do TSE (total não disponível, "
             "não é zero).",
+        "por_categoria": {"natureza": "CALCULO",
+                          "descricao": "Quantidade e soma dos valores declarados por categoria. "
+                                       "Categorias vêm do mapa tipo de bem -> categoria "
+                                       "(ingestao/categorias_bens.csv); categoria nula = tipo "
+                                       "fora do mapa.",
+                          "mapa": "/api/categorias-bens",
+                          "itens": por_categoria},
         "por_tipo": {"natureza": "CALCULO",
                      "descricao": "Quantidade e soma dos valores declarados por tipo de bem, "
                                   "em ordem alfabética de tipo.",
@@ -115,6 +128,7 @@ def detalhe_candidato(sq: int, cur=Depends(cursor)):
     resposta["historico"] = {
         "disponivel": campo_com_fonte("historico_disponivel", c, g),
         "mensagem": None if disponivel else TEXTO_HISTORICO_INDISPONIVEL,
+        "observacao": TEXTO_TURNOS,
         "qt_candidaturas_anteriores": campo_com_fonte("qt_candidaturas_anteriores", c, g),
         "qt_vezes_eleito": campo_com_fonte("qt_vezes_eleito", c, g),
         "ultimo_cargo_eleito": campo_com_fonte("ultimo_cargo_eleito", c, g),

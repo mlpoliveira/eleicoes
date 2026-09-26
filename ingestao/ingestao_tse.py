@@ -181,14 +181,19 @@ SELECT
     k._arquivo AS fonte_arquivo_compl, k._linha AS fonte_linha_compl
 FROM c LEFT JOIN k USING (SQ_CANDIDATO);
 
+-- categoria (CÁLCULO): vem do mapa versionado ingestao/categorias_bens.csv (tabela categoria_bem),
+-- casado por tipo sem diferenciar maiúsculas/espaços. Tipo fora do mapa fica com categoria NULL
+-- (medido em `qualidade`), nunca é jogado em "Outros" em silêncio.
 CREATE OR REPLACE TABLE bem AS
-SELECT SQ_CANDIDATO::BIGINT AS sq_candidato,
-       NR_ORDEM_BEM_CANDIDATO::INT AS nr_ordem,
-       DS_TIPO_BEM_CANDIDATO AS tipo, nz(DS_BEM_CANDIDATO) AS descricao,
-       valor(VR_BEM_CANDIDATO) AS valor, VR_BEM_CANDIDATO AS valor_original,
-       dt(DT_ULT_ATUAL_BEM_CANDIDATO) AS dt_atualizacao,
-       _arquivo AS fonte_arquivo, _linha AS fonte_linha
-FROM raw_bem_candidato WHERE _carga_id = $carga;
+SELECT r.SQ_CANDIDATO::BIGINT AS sq_candidato,
+       r.NR_ORDEM_BEM_CANDIDATO::INT AS nr_ordem,
+       r.DS_TIPO_BEM_CANDIDATO AS tipo, m.categoria, nz(r.DS_BEM_CANDIDATO) AS descricao,
+       valor(r.VR_BEM_CANDIDATO) AS valor, r.VR_BEM_CANDIDATO AS valor_original,
+       dt(r.DT_ULT_ATUAL_BEM_CANDIDATO) AS dt_atualizacao,
+       r._arquivo AS fonte_arquivo, r._linha AS fonte_linha
+FROM raw_bem_candidato r
+LEFT JOIN categoria_bem m ON lower(trim(m.tipo)) = lower(trim(r.DS_TIPO_BEM_CANDIDATO))
+WHERE r._carga_id = $carga;
 
 CREATE OR REPLACE TABLE rede_social AS
 SELECT SQ_CANDIDATO::BIGINT AS sq_candidato, NR_ORDEM_REDE_SOCIAL::INT AS nr_ordem,
@@ -254,11 +259,25 @@ LEFT JOIN (SELECT sq_candidato_atual AS sq_candidato,
                   count(*) FILTER (WHERE ano_eleicao < 2026 AND eleito) qt_vezes_eleito,
                   arg_max(ds_cargo || ' (' || ano_eleicao || ')', ano_eleicao)
                       FILTER (WHERE ano_eleicao < 2026 AND eleito) ultimo_cargo_eleito
-           FROM historico GROUP BY 1) h USING (sq_candidato);
+           -- O arquivo de histórico traz UMA LINHA POR TURNO: quem foi ao 2º turno aparece duas
+           -- vezes (turno 1 = "2º turno", turno 2 = resultado final). Conta-se uma candidatura por
+           -- ano + cargo (cd_cargo, nunca ds_cargo) + UF + unidade eleitoral; é "eleita" se algum
+           -- turno tem resultado "Eleito...". Linhas repetidas são medidas em `qualidade`.
+           FROM (SELECT sq_candidato_atual, ano_eleicao, cd_cargo, sg_uf, nm_ue,
+                        min(ds_cargo) AS ds_cargo, bool_or(eleito) AS eleito
+                 FROM historico GROUP BY ALL) cand_hist
+           GROUP BY 1) h USING (sq_candidato);
 """
 
 QUALIDADE = [
     ("candidatos", "SELECT count(*) FROM candidato"),
+    ("linhas do histórico que repetem uma candidatura (uma linha por turno)",
+     """SELECT count(*) - (SELECT count(*) FROM (SELECT DISTINCT sq_candidato_atual, ano_eleicao,
+                                                  cd_cargo, sg_uf, nm_ue FROM historico))
+        FROM historico"""),
+    ("tipos de bem sem categoria no mapa (ingestao/categorias_bens.csv)",
+     "SELECT count(DISTINCT tipo) FROM bem WHERE categoria IS NULL"),
+    ("bens sem categoria no mapa", "SELECT count(*) FROM bem WHERE categoria IS NULL"),
     ("candidatos sem registro no complementar",
      "SELECT count(*) FROM candidato WHERE fonte_linha_compl IS NULL"),
     ("candidatos sem situação da candidatura",
@@ -324,12 +343,30 @@ def registrar_alteracoes(con, carga: int):
     return con.execute("SELECT count(*) FROM alteracao WHERE carga_id = ?", [carga]).fetchone()[0]
 
 
+def carregar_categorias(con, arquivo: Path):
+    """Mapa versionado tipo de bem -> categoria (CÁLCULO documentado, editável no CSV)."""
+    df = pd.read_csv(arquivo, sep=";", encoding="utf-8", dtype=str, keep_default_na=False)
+    faltando = {"tipo", "categoria"} - set(df.columns)
+    if faltando:
+        sys.exit(f"{arquivo.name}: colunas obrigatórias ausentes: {sorted(faltando)}")
+    dup = df["tipo"].str.strip().str.lower().duplicated()
+    if dup.any():
+        sys.exit(f"{arquivo.name}: tipo repetido no mapa: {df.loc[dup, 'tipo'].tolist()}")
+    df = df.assign(observacao=df.get("observacao", "").replace("", None),
+                   fonte_arquivo=arquivo.name, fonte_linha=range(2, len(df) + 2))
+    con.register("df_cat", df[["tipo", "categoria", "observacao", "fonte_arquivo", "fonte_linha"]])
+    con.execute("CREATE OR REPLACE TABLE categoria_bem AS SELECT * FROM df_cat")
+    con.unregister("df_cat")
+
+
 # ---------------------------------------------------------------- principal
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("pasta")
     ap.add_argument("--banco", default="eleicoes.duckdb")
     ap.add_argument("--forcar", action="store_true", help="recarrega mesmo se a geração já foi carregada")
+    ap.add_argument("--categorias", default=str(Path(__file__).with_name("categorias_bens.csv")),
+                    help="mapa tipo de bem -> categoria (CSV UTF-8, ';')")
     args = ap.parse_args()
 
     raiz = Path(args.pasta).expanduser().resolve()
@@ -362,10 +399,12 @@ def main():
     try:
         con.execute("INSERT INTO carga VALUES (?, ?, ?, ?, ?)",
                     [carga, datetime.now(), geracao, str(raiz),
-                     ", ".join(sorted(p.name for p in arquivos.values()))])
+                     ", ".join(sorted(p.name for p in arquivos.values()))
+                     + f", {Path(args.categorias).name}"])
         for prefixo, df in dfs.items():
             gravar_raw(con, f"raw_{prefixo}", df, carga)
         con.execute(MACROS)
+        carregar_categorias(con, Path(args.categorias))
         con.execute(MODELO.replace("$carga", str(carga)))
         n_alt = registrar_alteracoes(con, carga)
 

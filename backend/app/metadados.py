@@ -83,10 +83,11 @@ CAMPOS = {
         "no dataset utilizado; não significa que nunca concorreu)."),
     "qt_candidaturas_anteriores": (
         "CALCULO", HIST, "ANO_ELEICAO",
-        "Registros do arquivo de histórico com ano anterior a 2026. Nulo = histórico indisponível."),
+        "Candidaturas anteriores a 2026 no arquivo de histórico, contando uma por ano + cargo + "
+        "local (o arquivo tem uma linha por turno). Nulo = histórico indisponível."),
     "qt_vezes_eleito": (
         "CALCULO", HIST, "DS_SIT_TOT_TURNO",
-        "Registros anteriores a 2026 cujo resultado começa com 'Eleito'. "
+        "Candidaturas anteriores a 2026 com resultado começando por 'Eleito' em algum turno. "
         "Nulo = histórico indisponível."),
     "ultimo_cargo_eleito": ("CALCULO", HIST, "DS_CARGO | ANO_ELEICAO | DS_SIT_TOT_TURNO", None),
     "qt_outros_registros_2026": (
@@ -101,6 +102,10 @@ CAMPOS = {
 CAMPOS_BEM = {
     "nr_ordem": ("DADO", "NR_ORDEM_BEM_CANDIDATO", None),
     "tipo": ("DADO", "DS_TIPO_BEM_CANDIDATO", None),
+    "categoria": ("CALCULO", "DS_TIPO_BEM_CANDIDATO",
+                  "Categoria atribuída ao tipo de bem pelo mapa versionado "
+                  "ingestao/categorias_bens.csv (ver /api/categorias-bens). "
+                  "Nulo = tipo que não está no mapa."),
     "descricao": ("DECLARACAO_CANDIDATO", "DS_BEM_CANDIDATO",
                   "Texto declarado pelo candidato à Justiça Eleitoral."),
     "valor": ("DADO", "VR_BEM_CANDIDATO",

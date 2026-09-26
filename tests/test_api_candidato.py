@@ -195,3 +195,34 @@ def test_fonte_parametros_invalidos(cliente):
                                              "campo": "pessoa_id"}).status_code == 422
     assert cliente.get("/api/fonte", params={**base, "tabela": "bem",
                                              "campo": '"; DROP TABLE bem; --'}).status_code == 422
+
+
+# ---------------------------------------------------------------- T4: categorias
+def test_patrimonio_por_categoria(cliente):
+    p = detalhe(cliente, SQ + 14)["patrimonio"]
+    assert p["por_categoria"]["mapa"] == "/api/categorias-bens"
+    assert p["por_categoria"]["natureza"] == "CALCULO"
+    assert p["por_categoria"]["itens"] == [
+        {"categoria": "Veículos", "qt": 1, "total": 350000.5},
+        {"categoria": None, "qt": 1, "total": 1200.0}]
+    assert [b["categoria"] for b in p["bens"]["itens"]] == ["Veículos", None]
+    assert p["bens"]["campos"]["categoria"]["natureza"] == "CALCULO"
+
+
+def test_mapa_de_categorias(cliente):
+    r = cliente.get("/api/categorias-bens").json()
+    assert r["natureza"] == "CALCULO"
+    assert len(r["mapa"]) == 49 and len(r["categorias"]) == 6
+    apto = next(m for m in r["mapa"] if m["tipo"] == "Apartamento")
+    assert apto["categoria"] == "Imóveis" and apto["fonte_arquivo"] == "categorias_bens.csv"
+    assert apto["qt_bens"] == 76  # 40 x 2 bens, menos caso 9 (sem bens) e caso 14 (outros tipos)
+    assert r["tipos_fora_do_mapa"] == [{"tipo": "Tipo novo fora do mapa", "qt_bens": 1}]
+
+
+def test_historico_com_dois_turnos(cliente):
+    h = detalhe(cliente, SQ + 15)["historico"]
+    assert "uma linha por turno" in h["observacao"]
+    assert h["qt_candidaturas_anteriores"]["valor"] == 1
+    assert h["qt_vezes_eleito"]["valor"] == 1
+    turnos = [(i["ano_eleicao"], i["turno"], i["resultado"]) for i in h["linha_do_tempo"]["itens"]]
+    assert turnos == [(2026, 1, None), (2020, 1, "2º turno"), (2020, 2, "Eleito")]
