@@ -1,11 +1,21 @@
 # Chave do pessoa_id — NUNCA versionar (permitiria reverter o identificador)
 *.chave
 
+# Segredos (chave da IA etc.) — NUNCA versionar. Modelo sem segredos: .env.exemplo
+.env
+.env.*
+!.env.exemplo
+
+# Scripts locais de consulta
+consulta.py
+
 # Banco e dados do TSE (grandes e regeneráveis a partir da fonte oficial)
 *.duckdb
 *.duckdb.wal
 *.zip
 *.csv
+# exceção: mapa versionado de categorias de bens (T4)
+!ingestao/categorias_bens.csv
 _extraido/
 
 # Relatórios gerados
@@ -14,3 +24,8 @@ inventario_tse.json
 # Python
 __pycache__/
 .venv/
+.pytest_cache/
+*.egg-info/
+
+# Log local das perguntas à IA
+logs/

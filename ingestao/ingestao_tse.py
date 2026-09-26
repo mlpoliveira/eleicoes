@@ -114,6 +114,8 @@ def gravar_raw(con, tabela: str, df: pd.DataFrame, carga_id: int):
 MACROS = r"""
 CREATE OR REPLACE MACRO nz(v) AS CASE WHEN trim(v) IN ('', '#NULO', '#NULO#', '#NE', '#NE#') THEN NULL ELSE trim(v) END;
 CREATE OR REPLACE MACRO nzcod(v) AS CASE WHEN trim(v) IN ('', '-1', '-3', '#NULO', '#NE') THEN NULL ELSE trim(v) END;
+-- sim/não do TSE -> BOOLEAN; ausência (#NULO/#NE) continua NULL (ausência não é "não")
+CREATE OR REPLACE MACRO sn(v, sim) AS CASE WHEN nz(v) IS NULL THEN NULL ELSE nz(v) = sim END;
 CREATE OR REPLACE MACRO dt(v) AS try_strptime(nz(v), '%d/%m/%Y')::DATE;
 CREATE OR REPLACE MACRO valor(v) AS try_cast(
     CASE WHEN nz(v) LIKE '%,%' THEN replace(replace(nz(v), '.', ''), ',', '.') ELSE nz(v) END
@@ -158,7 +160,7 @@ SELECT
     c.DS_GRAU_INSTRUCAO                       AS grau_instrucao,
     c.DS_ESTADO_CIVIL                         AS estado_civil,
     c.DS_OCUPACAO                             AS ocupacao,
-    k.ST_QUILOMBOLA = 'S'                     AS quilombola,
+    sn(k.ST_QUILOMBOLA, 'S')                 AS quilombola,
     nz(k.DS_ETNIA_INDIGENA)                   AS etnia_indigena,
     -- situação: vem do COMPLEMENTAR (no consulta_cand está 100% #NE). Candidaturas fora da urna
     -- (renúncia, indeferimento...) têm o campo TOT = #NULO; aí vale o DS_SITUACAO_JULGAMENTO.
@@ -167,8 +169,8 @@ SELECT
          WHEN nz(k.DS_SITUACAO_JULGAMENTO) IS NOT NULL THEN 'DS_SITUACAO_JULGAMENTO' END AS situacao_campo_origem,
     nz(k.DS_SITUACAO_JULGAMENTO)              AS situacao_julgamento,
     nz(k.NM_TIPO_DESTINACAO_VOTOS)            AS destinacao_votos,
-    k.ST_CANDIDATO_INSERIDO_URNA = 'SIM'      AS na_urna,
-    k.ST_SUBSTITUIDO = 'S'                    AS substituido,
+    sn(k.ST_CANDIDATO_INSERIDO_URNA, 'SIM')    AS na_urna,
+    sn(k.ST_SUBSTITUIDO, 'S')                AS substituido,
     try_cast(nzcod(k.SQ_SUBSTITUIDO) AS BIGINT) AS sq_substituido,
     nz(k.ST_DECLARAR_BENS)                    AS declarou_bens,
     CASE WHEN valor(k.VR_DESPESA_MAX_CAMPANHA) > 0
@@ -179,14 +181,19 @@ SELECT
     k._arquivo AS fonte_arquivo_compl, k._linha AS fonte_linha_compl
 FROM c LEFT JOIN k USING (SQ_CANDIDATO);
 
+-- categoria (CÁLCULO): vem do mapa versionado ingestao/categorias_bens.csv (tabela categoria_bem),
+-- casado por tipo sem diferenciar maiúsculas/espaços. Tipo fora do mapa fica com categoria NULL
+-- (medido em `qualidade`), nunca é jogado em "Outros" em silêncio.
 CREATE OR REPLACE TABLE bem AS
-SELECT SQ_CANDIDATO::BIGINT AS sq_candidato,
-       NR_ORDEM_BEM_CANDIDATO::INT AS nr_ordem,
-       DS_TIPO_BEM_CANDIDATO AS tipo, nz(DS_BEM_CANDIDATO) AS descricao,
-       valor(VR_BEM_CANDIDATO) AS valor, VR_BEM_CANDIDATO AS valor_original,
-       dt(DT_ULT_ATUAL_BEM_CANDIDATO) AS dt_atualizacao,
-       _arquivo AS fonte_arquivo, _linha AS fonte_linha
-FROM raw_bem_candidato WHERE _carga_id = $carga;
+SELECT r.SQ_CANDIDATO::BIGINT AS sq_candidato,
+       r.NR_ORDEM_BEM_CANDIDATO::INT AS nr_ordem,
+       r.DS_TIPO_BEM_CANDIDATO AS tipo, m.categoria, nz(r.DS_BEM_CANDIDATO) AS descricao,
+       valor(r.VR_BEM_CANDIDATO) AS valor, r.VR_BEM_CANDIDATO AS valor_original,
+       dt(r.DT_ULT_ATUAL_BEM_CANDIDATO) AS dt_atualizacao,
+       r._arquivo AS fonte_arquivo, r._linha AS fonte_linha
+FROM raw_bem_candidato r
+LEFT JOIN categoria_bem m ON lower(trim(m.tipo)) = lower(trim(r.DS_TIPO_BEM_CANDIDATO))
+WHERE r._carga_id = $carga;
 
 CREATE OR REPLACE TABLE rede_social AS
 SELECT SQ_CANDIDATO::BIGINT AS sq_candidato, NR_ORDEM_REDE_SOCIAL::INT AS nr_ordem,
@@ -235,14 +242,15 @@ SELECT SQ_COLIGACAO::BIGINT AS sq_coligacao, SG_UF AS sg_uf, CD_CARGO::INT AS cd
        DS_SITUACAO AS situacao_legenda, _arquivo AS fonte_arquivo, _linha AS fonte_linha
 FROM raw_consulta_coligacao WHERE _carga_id = $carga;
 
--- Visão de trabalho do app: candidato + totais derivados
-CREATE OR REPLACE VIEW v_candidato AS
+-- Tabela de trabalho do app: candidato + totais derivados. Materializada (não é VIEW) porque só
+-- muda a cada carga e a agregação do histórico é cara para recalcular a cada consulta da API.
+CREATE OR REPLACE TABLE v_candidato AS
 SELECT c.*,
        b.qt_bens, b.total_bens,
        h.sq_hist IS NOT NULL AS historico_disponivel,   -- FALSE = sem dado, NÃO "nunca concorreu"
        h.qt_candidaturas_anteriores, h.qt_vezes_eleito, h.ultimo_cargo_eleito,
-       (SELECT count(*) FROM candidato o WHERE o.pessoa_id = c.pessoa_id
-          AND o.sq_candidato <> c.sq_candidato) AS qt_outros_registros_2026
+       CASE WHEN c.pessoa_id IS NULL THEN 0
+            ELSE count(*) OVER (PARTITION BY c.pessoa_id) - 1 END AS qt_outros_registros_2026
 FROM candidato c
 LEFT JOIN (SELECT sq_candidato, count(*) qt_bens, sum(valor) total_bens
            FROM bem GROUP BY 1) b USING (sq_candidato)
@@ -252,11 +260,25 @@ LEFT JOIN (SELECT sq_candidato_atual AS sq_candidato,
                   count(*) FILTER (WHERE ano_eleicao < 2026 AND eleito) qt_vezes_eleito,
                   arg_max(ds_cargo || ' (' || ano_eleicao || ')', ano_eleicao)
                       FILTER (WHERE ano_eleicao < 2026 AND eleito) ultimo_cargo_eleito
-           FROM historico GROUP BY 1) h USING (sq_candidato);
+           -- O arquivo de histórico traz UMA LINHA POR TURNO: quem foi ao 2º turno aparece duas
+           -- vezes (turno 1 = "2º turno", turno 2 = resultado final). Conta-se uma candidatura por
+           -- ano + cargo (cd_cargo, nunca ds_cargo) + UF + unidade eleitoral; é "eleita" se algum
+           -- turno tem resultado "Eleito...". Linhas repetidas são medidas em `qualidade`.
+           FROM (SELECT sq_candidato_atual, ano_eleicao, cd_cargo, sg_uf, nm_ue,
+                        min(ds_cargo) AS ds_cargo, bool_or(eleito) AS eleito
+                 FROM historico GROUP BY ALL) cand_hist
+           GROUP BY 1) h USING (sq_candidato);
 """
 
 QUALIDADE = [
     ("candidatos", "SELECT count(*) FROM candidato"),
+    ("linhas do histórico que repetem uma candidatura (uma linha por turno)",
+     """SELECT count(*) - (SELECT count(*) FROM (SELECT DISTINCT sq_candidato_atual, ano_eleicao,
+                                                  cd_cargo, sg_uf, nm_ue FROM historico))
+        FROM historico"""),
+    ("tipos de bem sem categoria no mapa (ingestao/categorias_bens.csv)",
+     "SELECT count(DISTINCT tipo) FROM bem WHERE categoria IS NULL"),
+    ("bens sem categoria no mapa", "SELECT count(*) FROM bem WHERE categoria IS NULL"),
     ("candidatos sem registro no complementar",
      "SELECT count(*) FROM candidato WHERE fonte_linha_compl IS NULL"),
     ("candidatos sem situação da candidatura",
@@ -322,12 +344,30 @@ def registrar_alteracoes(con, carga: int):
     return con.execute("SELECT count(*) FROM alteracao WHERE carga_id = ?", [carga]).fetchone()[0]
 
 
+def carregar_categorias(con, arquivo: Path):
+    """Mapa versionado tipo de bem -> categoria (CÁLCULO documentado, editável no CSV)."""
+    df = pd.read_csv(arquivo, sep=";", encoding="utf-8", dtype=str, keep_default_na=False)
+    faltando = {"tipo", "categoria"} - set(df.columns)
+    if faltando:
+        sys.exit(f"{arquivo.name}: colunas obrigatórias ausentes: {sorted(faltando)}")
+    dup = df["tipo"].str.strip().str.lower().duplicated()
+    if dup.any():
+        sys.exit(f"{arquivo.name}: tipo repetido no mapa: {df.loc[dup, 'tipo'].tolist()}")
+    df = df.assign(observacao=df.get("observacao", "").replace("", None),
+                   fonte_arquivo=arquivo.name, fonte_linha=range(2, len(df) + 2))
+    con.register("df_cat", df[["tipo", "categoria", "observacao", "fonte_arquivo", "fonte_linha"]])
+    con.execute("CREATE OR REPLACE TABLE categoria_bem AS SELECT * FROM df_cat")
+    con.unregister("df_cat")
+
+
 # ---------------------------------------------------------------- principal
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("pasta")
     ap.add_argument("--banco", default="eleicoes.duckdb")
     ap.add_argument("--forcar", action="store_true", help="recarrega mesmo se a geração já foi carregada")
+    ap.add_argument("--categorias", default=str(Path(__file__).with_name("categorias_bens.csv")),
+                    help="mapa tipo de bem -> categoria (CSV UTF-8, ';')")
     args = ap.parse_args()
 
     raiz = Path(args.pasta).expanduser().resolve()
@@ -360,10 +400,17 @@ def main():
     try:
         con.execute("INSERT INTO carga VALUES (?, ?, ?, ?, ?)",
                     [carga, datetime.now(), geracao, str(raiz),
-                     ", ".join(sorted(p.name for p in arquivos.values()))])
+                     ", ".join(sorted(p.name for p in arquivos.values()))
+                     + f", {Path(args.categorias).name}"])
         for prefixo, df in dfs.items():
             gravar_raw(con, f"raw_{prefixo}", df, carga)
         con.execute(MACROS)
+        # bancos antigos têm v_candidato como VIEW; agora é tabela materializada
+        tipo = con.execute("SELECT table_type FROM information_schema.tables "
+                           "WHERE table_name = 'v_candidato'").fetchone()
+        if tipo and tipo[0] == "VIEW":
+            con.execute("DROP VIEW v_candidato")
+        carregar_categorias(con, Path(args.categorias))
         con.execute(MODELO.replace("$carga", str(carga)))
         n_alt = registrar_alteracoes(con, carga)
 

@@ -38,6 +38,66 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
 - `ingestao/ingestao_tse.py`: carga versionada em DuckDB (`eleicoes.duckdb`). Uso:
   `python ingestao/ingestao_tse.py "<pasta dos zips>"`. Rodar de novo com nova geração do TSE
   cria nova carga e registra diferenças em `alteracao`.
+- Estrutura: `ingestao/`, `backend/`, `frontend/`, `tests/`, `docs/`
+  (`docs/inventario_tse.md` = saída do inventário).
+- API (`backend/app/`): `ELEICOES_DB=eleicoes.duckdb uvicorn app.main:app --app-dir backend`.
+  `db.py` (conexão read-only, cursor por requisição), `metadados.py` (natureza + fonte TSE de cada
+  campo exposto), `rotas/candidatos.py` (`GET /api/candidatos`, `GET /api/filtros`),
+  `rotas/candidato.py` (`GET /api/candidatos/{sq}` com seções, cada campo com natureza + fonte;
+  `GET /api/fonte?tabela=&sq=&campo=[&nr_ordem=|&linha=]` devolve arquivo, linha e o texto
+  original do CSV lido das tabelas `raw_*`), `rotas/bens.py` (`GET /api/categorias-bens`),
+  `rotas/estatisticas.py` (`GET /api/estatisticas`, `GET /api/estatisticas/metricas`,
+  `GET /api/candidatos/{sq}/posicao`). `universo.py` define o recorte (filtros comuns à busca e às
+  estatísticas), gera a descrição em texto e os alertas (cargos/UFs misturados, n < 30).
+  Estatísticas: registros sem o dado ficam fora do cálculo e são contados em `n_sem_dado` com o
+  motivo; posição do candidato = percentil (posição média) + relação com a mediana, nunca "nº X de Y".
+  `rotas/comparar.py` (`GET /api/comparar?sq=1&sq=2` ou `?sq=1,2`, 2 a 5): tabela lado a lado com
+  fonte por valor, verificações (mesmo cargo/UF/partido, histórico e bens disponíveis, mesma pessoa),
+  alertas e "Principais diferenças encontradas nos dados" (só fatos; moeda não formatada no texto).
+- Frontend (`frontend/`, Next.js 16 + React 19 + Tailwind 4 + ECharts): `npm install`, `npm run build`,
+  `npm start` (porta 3000; `API_URL` = backend, padrão http://localhost:8000 — `/api/*` é repassado
+  pelo `next.config.ts`). Telas: Início (cartões + candidaturas por cargo + patrimônio, com filtros),
+  Candidatos (busca com filtros/ordenação/paginação na URL), Candidato (`/candidatos/[sq]`) e Comparar
+  (seleção de até 5 no localStorage). `components/FiguraGrafico` exige título, unidade, universo,
+  período e fonte e oferece "Ver tabela"; `SeloNatureza` + `VerFonte` em cada campo; cores como
+  tokens em `app/globals.css` (claro/escuro). Moeda formatada só em `lib/formato.ts`; códigos
+  (sq_/nr_/cd_) nunca ganham separador de milhar. Checagem: `npm run typecheck` e `npm run build`.
+  `GET /api/carga` (backend) alimenta o rodapé com a geração TSE da carga atual.
+- T9: `rotas/qualidade.py` — `GET /api/cargas`, `GET /api/qualidade[?carga_id=]` (verificações da
+  carga + valor da carga anterior + explicação em texto de cada verificação em `EXPLICACOES`; nova
+  verificação na ingestão exige explicação, há teste) e `GET /api/alteracoes[?carga_id=&campo=&uf=&cd_cargo=]`
+  (resumo por campo, transições de situação, itens; candidato removido usa dados da carga anterior).
+  Telas `/qualidade` e `/alteracoes` no frontend.
+- T8: `exportar.py` (CSV UTF-8 com BOM, `;`, vírgula decimal, metadados em linhas `# chave;valor`,
+  tabelas após `## nome`; Excel com aba `metadados` + uma aba por tabela + `campos`) e
+  `rotas/exportar.py` (`GET /api/exportar/{candidatos|comparar|estatisticas}?formato=csv|xlsx` + os
+  mesmos parâmetros da tela). As rotas chamam as funções das rotas de consulta — exportação nunca
+  diverge da tela. Ausência = texto "não disponível no dataset utilizado"; pessoa_id nunca sai.
+  Botões "Exportar: CSV | Excel" na busca, no comparador e no início (`components/Exportar.tsx`).
+- T10 "Pergunte aos dados": `backend/app/ia/` — `cliente.py` (chat/completions formato OpenAI; padrão
+  API da NVIDIA: `NVIDIA_API_KEY`, `IA_BASE_URL`=https://integrate.api.nvidia.com/v1,
+  `IA_MODELO` (padrão `MODELO_PADRAO` em cliente.py; o meta/llama-3.3-70b-instruct foi aposentado
+  pela NVIDIA em 26/08/2026 — conferir a lista em `/v1/models`) — precisa suportar tool calling; cliente injetável em
+  `criar_app(ia_cliente=...)`), `ferramentas.py` (10 ferramentas = funções das rotas, respostas enxutas),
+  `neutralidade.py` (recusa ANTES do modelo: voto, melhores/piores/ranking, inferências pessoais;
+  checagem de termos avaliativos DEPOIS, com 1 reescrita, senão resposta retida), `agente.py` (prompt
+  com as regras, até 6 rodadas, resposta JSON {criterio, resposta, calculo}, log em `logs/ia.jsonl`
+  — fora do Git). Rota `POST /api/perguntar` (+ `GET /api/perguntar/status`); sem chave → 503.
+  Tela `/perguntar`. Testes com modelo roteirizado (`tests/test_ia.py`), nunca chamam serviço externo.
+  `scripts/testar_modelos_ia.py` testa quais modelos do catálogo chamam as ferramentas (usa a cota da
+  chave). O agente descarta blocos `<think>` de modelos de raciocínio antes de ler o JSON.
+- Teste de neutralidade automatizado em `tests/test_api_comparar.py` (regex de termos avaliativos
+  sobre o texto gerado; valores vindos da base são retirados antes). Gerador `v3` = v1 + candidatos
+  em outro cargo (40) e outra UF (41).
+- Categorias de bens: mapa versionado `ingestao/categorias_bens.csv` (tipo;categoria;observacao,
+  UTF-8) carregado na ingestão como tabela `categoria_bem`; `bem.categoria` é CÁLCULO. Tipo fora do
+  mapa fica com categoria NULL e é medido em `qualidade`. Mudou o mapa? Rodar a ingestão com `--forcar`.
+  A busca normaliza nome e termo (minúsculas, sem acento, sem pontuação); correspondência
+  "exata" (trecho) vem antes da "aproximada" (Jaro-Winkler >= 0,90 por palavra de 4+ letras).
+  A API trava o arquivo do DuckDB: pare-a antes de rodar nova carga.
+- Testes: `pip install -e "backend[dev]"` e `pytest` na raiz. Fixtures em `tests/conftest.py`
+  (`banco_v1` = 1 carga; `banco_v2` = cargas v1+v2 no mesmo banco). O gerador sintético cobre as
+  armadilhas abaixo (casos por índice documentados no topo de `tests/gerar_dados_sinteticos.py`).
 - Banco real validado: 20.987 candidatos; 19.156 com histórico; 14.670 já concorreram antes;
   5.597 já foram eleitos alguma vez; 266 bens com valor zero; 11 redes órfãs.
 
@@ -52,12 +112,12 @@ Tabelas finais (reconstruídas a partir da última carga):
   dt_nascimento, idade_na_posse, nacionalidade), `situacao_candidatura` + `situacao_campo_origem`,
   `situacao_julgamento`, `na_urna`, `substituido`, `declarou_bens`, `limite_gastos`, `resultado`
   (vazio até a apuração), `fonte_*`.
-- `bem` (sq_candidato, nr_ordem, tipo, descricao, valor DECIMAL, valor_original, dt_atualizacao)
+- `bem` (sq_candidato, nr_ordem, tipo, categoria, descricao, valor DECIMAL, valor_original, dt_atualizacao)
 - `rede_social` (sq_candidato, nr_ordem, url, plataforma)
 - `historico` (sq_candidato_atual → candidaturas desde 2004, com `eleito`, resultado, cargo, partido)
 - `fundamento_indeferimento` (vem do arquivo `motivo_cassacao` do TSE — ver armadilhas)
 - `vaga` (sg_uf, cd_cargo, qt_vaga), `coligacao`
-- View `v_candidato`: candidato + `qt_bens`, `total_bens`, `historico_disponivel`,
+- `v_candidato` (TABELA materializada na ingestão — antes era VIEW): candidato + `qt_bens`, `total_bens`, `historico_disponivel`,
   `qt_candidaturas_anteriores`, `qt_vezes_eleito`, `ultimo_cargo_eleito`, `qt_outros_registros_2026`.
 
 ## Armadilhas já descobertas nos dados do TSE (não redescobrir)
@@ -73,6 +133,9 @@ Tabelas finais (reconstruídas a partir da última carga):
   devem excluir esse grupo e dizer isso.
 - ~107 pessoas têm 2 registros (normalmente renunciou e registrou de novo, às vezes outro cargo).
   Ligar por `pessoa_id` (HMAC do CPF com chave local). Busca deve agrupar/indicar isso.
+- **`historico` tem uma linha por turno**: quem foi ao 2º turno aparece 2 vezes no mesmo ano/cargo
+  (turno 1 = "2º turno", turno 2 = resultado final; 637 casos no banco real). Contagens de
+  candidaturas usam ano + `cd_cargo` + UF + UE e "eleito" = algum turno eleito (já feito em `v_candidato`).
 - Arquivo `motivo_cassacao` contém **fundamentos legais de indeferimento**, não cassações. Rotular assim.
 - `DS_CARGO` muda de grafia entre arquivos ("DEPUTADO FEDERAL", "Deputado Federal", "2. Suplente").
   **Juntar sempre por `cd_cargo`.** Em `historico` há 18 grafias para 13 códigos.
@@ -86,6 +149,9 @@ Tabelas finais (reconstruídas a partir da última carga):
 
 CPF, título eleitoral e e-mail são descartados na leitura e não existem no banco.
 O arquivo `eleicoes.chave` (chave do `pessoa_id`) **nunca** vai para o Git (ver `.gitignore`).
+O arquivo `.env` (chave da IA e configuração local) **nunca** vai para o Git; modelo sem segredos em
+`.env.exemplo`. A API lê o `.env` da raiz ao iniciar (`backend/app/config.py`; o terminal tem
+prioridade; os testes nunca leem — `ELEICOES_SEM_DOTENV=1` no `conftest.py`).
 Nunca expor `pessoa_id` na UI ou em exportações.
 
 ## Stack
