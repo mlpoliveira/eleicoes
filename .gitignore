@@ -1,0 +1,16 @@
+# Chave do pessoa_id — NUNCA versionar (permitiria reverter o identificador)
+*.chave
+
+# Banco e dados do TSE (grandes e regeneráveis a partir da fonte oficial)
+*.duckdb
+*.duckdb.wal
+*.zip
+*.csv
+_extraido/
+
+# Relatórios gerados
+inventario_tse.json
+
+# Python
+__pycache__/
+.venv/

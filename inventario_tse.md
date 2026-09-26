@@ -1,0 +1,491 @@
+# Inventário TSE — 2026-09-26T12:50:49
+
+Extensões: {'.zip': 13}
+
+## ZIPs
+- bem_candidato_2026.zip
+- certidao_criminal_2026_BR.zip
+- certidao_criminal_2026_RJ.zip
+- consulta_cand_2026.zip
+- consulta_cand_complementar_2026.zip
+- consulta_coligacao_2026.zip
+- consulta_vagas_2026.zip
+- foto_cand2026_RJ_div.zip
+- historico_candidatura_2026.zip
+- motivo_cassacao_2026.zip
+- proposta_governo_2026_BR.zip
+- proposta_governo_2026_RJ.zip
+- rede_social_candidato_2026.zip
+
+## Layout 1 — 29 arquivo(s), 154,528 linhas no total
+- `bem_candidato_2026_AC.csv` — 1108 linhas, 0.27 MB, latin-1
+- `bem_candidato_2026_AL.csv` — 1207 linhas, 0.3 MB, latin-1
+- `bem_candidato_2026_AM.csv` — 1675 linhas, 0.42 MB, latin-1
+- `bem_candidato_2026_AP.csv` — 642 linhas, 0.16 MB, latin-1
+- `bem_candidato_2026_BA.csv` — 3894 linhas, 0.96 MB, latin-1
+- `bem_candidato_2026_BR.csv` — 309 linhas, 0.07 MB, latin-1
+- `bem_candidato_2026_BRASIL.csv` — 77264 linhas, 19.11 MB, latin-1
+- `bem_candidato_2026_CE.csv` — 2636 linhas, 0.63 MB, latin-1
+- `bem_candidato_2026_DF.csv` — 2022 linhas, 0.5 MB, latin-1
+- `bem_candidato_2026_ES.csv` — 1785 linhas, 0.44 MB, latin-1
+- `bem_candidato_2026_GO.csv` — 3947 linhas, 0.97 MB, latin-1
+- `bem_candidato_2026_MA.csv` — 2385 linhas, 0.59 MB, latin-1
+- `bem_candidato_2026_MG.csv` — 6625 linhas, 1.65 MB, latin-1
+- `bem_candidato_2026_MS.csv` — 1958 linhas, 0.5 MB, latin-1
+- `bem_candidato_2026_MT.csv` — 2467 linhas, 0.63 MB, latin-1
+- `bem_candidato_2026_PA.csv` — 2517 linhas, 0.62 MB, latin-1
+- `bem_candidato_2026_PB.csv` — 1767 linhas, 0.42 MB, latin-1
+- `bem_candidato_2026_PE.csv` — 2718 linhas, 0.66 MB, latin-1
+- `bem_candidato_2026_PI.csv` — 1652 linhas, 0.41 MB, latin-1
+- `bem_candidato_2026_PR.csv` — 5456 linhas, 1.34 MB, latin-1
+- `bem_candidato_2026_RJ.csv` — 5779 linhas, 1.44 MB, latin-1
+- `bem_candidato_2026_RN.csv` — 1213 linhas, 0.31 MB, latin-1
+- `bem_candidato_2026_RO.csv` — 1892 linhas, 0.47 MB, latin-1
+- `bem_candidato_2026_RR.csv` — 1045 linhas, 0.26 MB, latin-1
+- `bem_candidato_2026_RS.csv` — 3956 linhas, 1.0 MB, latin-1
+- `bem_candidato_2026_SC.csv` — 3722 linhas, 0.94 MB, latin-1
+- `bem_candidato_2026_SE.csv` — 1186 linhas, 0.28 MB, latin-1
+- `bem_candidato_2026_SP.csv` — 10130 linhas, 2.5 MB, latin-1
+- `bem_candidato_2026_TO.csv` — 1571 linhas, 0.38 MB, latin-1
+
+  - DT_GERACAO (0.0% nulos, 1 distintos) → ['26/09/2026']
+  - HH_GERACAO (0.0% nulos, 1 distintos) → ['08:31:13']
+  - ANO_ELEICAO (0.0% nulos, 1 distintos) → ['2026']
+  - CD_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['2']
+  - NM_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['Eleição Ordinária']
+  - CD_ELEICAO (0.0% nulos, 2 distintos) → ['6259', '6257']
+  - DS_ELEICAO (0.0% nulos, 2 distintos) → ['Eleições Gerais Estaduais 2026', 'Eleição Geral Federal 2026']
+  - DT_ELEICAO (0.0% nulos, 1 distintos) → ['04/10/2026']
+  - SG_UF (0.0% nulos, 28 distintos) → ['SP', 'MG', 'RJ', 'PR', 'RS', 'GO', 'BA', 'SC', 'PE', 'CE', 'PA', 'MT', 'MA', 'DF', 'MS', 'RO', 'ES', 'PB', 'AM', 'PI', 'TO', 'RN', 'AL', 'SE', 'AC', 'RR', 'AP', 'BR']
+  - SG_UE (0.0% nulos, 28 distintos) → ['SP', 'MG', 'RJ', 'PR', 'RS', 'GO', 'BA', 'SC', 'PE', 'CE', 'PA', 'MT', 'MA', 'DF', 'MS', 'RO', 'ES', 'PB', 'AM', 'PI', 'TO', 'RN', 'AL', 'SE', 'AC', 'RR', 'AP', 'BR']
+  - NM_UE (0.0% nulos, 28 distintos) → ['SÃO PAULO', 'MINAS GERAIS', 'RIO DE JANEIRO', 'PARANÁ', 'RIO GRANDE DO SUL', 'GOIÁS', 'BAHIA', 'SANTA CATARINA', 'PERNAMBUCO', 'CEARÁ', 'PARÁ', 'MATO GROSSO', 'MARANHÃO', 'DISTRITO FEDERAL', 'MATO GROSSO DO SUL', 'RONDÔNIA', 'ESPÍRITO SANTO', 'PARAÍBA', 'AMAZONAS', 'PIAUÍ', 'TOCANTINS', 'RIO GRANDE DO NORTE', 'ALAGOAS', 'SERGIPE', 'ACRE', 'RORAIMA', 'AMAPÁ', 'BRASIL']
+  - SQ_CANDIDATO (0.0% nulos, 13911 distintos)
+  - NR_ORDEM_BEM_CANDIDATO (0.0% nulos, 152 distintos)
+  - CD_TIPO_BEM_CANDIDATO (0.0% nulos, 49 distintos)
+  - DS_TIPO_BEM_CANDIDATO (0.0% nulos, 49 distintos)
+  - DS_BEM_CANDIDATO (0.0% nulos, 47869 distintos)
+  - VR_BEM_CANDIDATO (0.0% nulos, 34295 distintos)
+  - DT_ULT_ATUAL_BEM_CANDIDATO (0.0% nulos, 12 distintos) → ['18/09/2026', '16/09/2026', '25/09/2026', '15/09/2026', '24/09/2026', '17/09/2026', '23/09/2026', '20/09/2026', '21/09/2026', '19/09/2026', '22/09/2026', '14/09/2026']
+  - HH_ULT_ATUAL_BEM_CANDIDATO (0.0% nulos, 1156 distintos)
+
+## Layout 2 — 29 arquivo(s), 41,974 linhas no total
+- `consulta_cand_2026_AC.csv` — 388 linhas, 0.22 MB, latin-1
+- `consulta_cand_2026_AL.csv` — 299 linhas, 0.17 MB, latin-1
+- `consulta_cand_2026_AM.csv` — 475 linhas, 0.26 MB, latin-1
+- `consulta_cand_2026_AP.csv` — 322 linhas, 0.17 MB, latin-1
+- `consulta_cand_2026_BA.csv` — 1224 linhas, 0.67 MB, latin-1
+- `consulta_cand_2026_BR.csv` — 28 linhas, 0.02 MB, latin-1
+- `consulta_cand_2026_BRASIL.csv` — 20987 linhas, 11.59 MB, latin-1
+- `consulta_cand_2026_CE.csv` — 713 linhas, 0.4 MB, latin-1
+- `consulta_cand_2026_DF.csv` — 668 linhas, 0.37 MB, latin-1
+- `consulta_cand_2026_ES.csv` — 591 linhas, 0.33 MB, latin-1
+- `consulta_cand_2026_GO.csv` — 905 linhas, 0.5 MB, latin-1
+- `consulta_cand_2026_MA.csv` — 619 linhas, 0.34 MB, latin-1
+- `consulta_cand_2026_MG.csv` — 1832 linhas, 1.02 MB, latin-1
+- `consulta_cand_2026_MS.csv` — 425 linhas, 0.24 MB, latin-1
+- `consulta_cand_2026_MT.csv` — 455 linhas, 0.25 MB, latin-1
+- `consulta_cand_2026_PA.csv` — 741 linhas, 0.41 MB, latin-1
+- `consulta_cand_2026_PB.csv` — 450 linhas, 0.25 MB, latin-1
+- `consulta_cand_2026_PE.csv` — 961 linhas, 0.53 MB, latin-1
+- `consulta_cand_2026_PI.csv` — 402 linhas, 0.22 MB, latin-1
+- `consulta_cand_2026_PR.csv` — 1090 linhas, 0.6 MB, latin-1
+- `consulta_cand_2026_RJ.csv` — 2055 linhas, 1.14 MB, latin-1
+- `consulta_cand_2026_RN.csv` — 330 linhas, 0.19 MB, latin-1
+- `consulta_cand_2026_RO.csv` — 438 linhas, 0.24 MB, latin-1
+- `consulta_cand_2026_RR.csv` — 413 linhas, 0.23 MB, latin-1
+- `consulta_cand_2026_RS.csv` — 1054 linhas, 0.59 MB, latin-1
+- `consulta_cand_2026_SC.csv` — 700 linhas, 0.39 MB, latin-1
+- `consulta_cand_2026_SE.csv` — 411 linhas, 0.23 MB, latin-1
+- `consulta_cand_2026_SP.csv` — 2630 linhas, 1.43 MB, latin-1
+- `consulta_cand_2026_TO.csv` — 368 linhas, 0.21 MB, latin-1
+
+  - DT_GERACAO (0.0% nulos, 1 distintos) → ['26/09/2026']
+  - HH_GERACAO (0.0% nulos, 1 distintos) → ['08:31:16']
+  - ANO_ELEICAO (0.0% nulos, 1 distintos) → ['2026']
+  - CD_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['2']
+  - NM_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['ELEIÇÃO ORDINÁRIA']
+  - NR_TURNO (0.0% nulos, 1 distintos) → ['1']
+  - CD_ELEICAO (0.0% nulos, 2 distintos) → ['6259', '6257']
+  - DS_ELEICAO (0.0% nulos, 2 distintos) → ['Eleições Gerais Estaduais 2026', 'Eleição Geral Federal 2026']
+  - DT_ELEICAO (0.0% nulos, 1 distintos) → ['04/10/2026']
+  - TP_ABRANGENCIA (0.0% nulos, 2 distintos) → ['ESTADUAL', 'FEDERAL']
+  - SG_UF (0.0% nulos, 28 distintos) → ['SP', 'RJ', 'MG', 'BA', 'PR', 'RS', 'PE', 'GO', 'PA', 'CE', 'SC', 'DF', 'MA', 'ES', 'AM', 'MT', 'PB', 'RO', 'MS', 'RR', 'SE', 'PI', 'AC', 'TO', 'RN', 'AP', 'AL', 'BR']
+  - SG_UE (0.0% nulos, 28 distintos) → ['SP', 'RJ', 'MG', 'BA', 'PR', 'RS', 'PE', 'GO', 'PA', 'CE', 'SC', 'DF', 'MA', 'ES', 'AM', 'MT', 'PB', 'RO', 'MS', 'RR', 'SE', 'PI', 'AC', 'TO', 'RN', 'AP', 'AL', 'BR']
+  - NM_UE (0.0% nulos, 28 distintos) → ['SÃO PAULO', 'RIO DE JANEIRO', 'MINAS GERAIS', 'BAHIA', 'PARANÁ', 'RIO GRANDE DO SUL', 'PERNAMBUCO', 'GOIÁS', 'PARÁ', 'CEARÁ', 'SANTA CATARINA', 'DISTRITO FEDERAL', 'MARANHÃO', 'ESPÍRITO SANTO', 'AMAZONAS', 'MATO GROSSO', 'PARAÍBA', 'RONDÔNIA', 'MATO GROSSO DO SUL', 'RORAIMA', 'SERGIPE', 'PIAUÍ', 'ACRE', 'TOCANTINS', 'RIO GRANDE DO NORTE', 'AMAPÁ', 'ALAGOAS', 'BRASIL']
+  - CD_CARGO (0.0% nulos, 10 distintos) → ['7', '6', '8', '10', '9', '5', '4', '3', '2', '1']
+  - DS_CARGO (0.0% nulos, 10 distintos) → ['DEPUTADO ESTADUAL', 'DEPUTADO FEDERAL', 'DEPUTADO DISTRITAL', '2º SUPLENTE', '1º SUPLENTE', 'SENADOR', 'VICE-GOVERNADOR', 'GOVERNADOR', 'VICE-PRESIDENTE', 'PRESIDENTE']
+  - SQ_CANDIDATO (0.0% nulos, 20987 distintos)
+  - NR_CANDIDATO (0.0% nulos, 5584 distintos)
+  - NM_CANDIDATO (0.0% nulos, 20843 distintos)
+  - NM_URNA_CANDIDATO (0.0% nulos, 20456 distintos)
+  - NM_SOCIAL_CANDIDATO (99.7% nulos, 57 distintos)
+  - NR_CPF_CANDIDATO (0.0% nulos, 20874 distintos)
+  - DS_EMAIL (0.0% nulos, 1 distintos) → ['NÃO DIVULGÁVEL']
+  - CD_SITUACAO_CANDIDATURA (0.0% nulos, 1 distintos) → ['-3']
+  - DS_SITUACAO_CANDIDATURA (100.0% nulos, 1 distintos) → ['#NE']
+  - TP_AGREMIACAO (0.0% nulos, 3 distintos) → ['PARTIDO ISOLADO', 'FEDERAÇÃO', 'COLIGAÇÃO']
+  - NR_PARTIDO (0.0% nulos, 30 distintos) → ['22', '15', '30', '10', '20', '55', '12', '13', '45', '70', '40', '44', '50', '27', '11', '33', '14', '77', '25', '36', '35', '18', '43', '80', '23', '65', '29', '16', '21', '28']
+  - SG_PARTIDO (0.0% nulos, 30 distintos) → ['PL', 'MDB', 'NOVO', 'REPUBLICANOS', 'PODE', 'PSD', 'PDT', 'PT', 'PSDB', 'AVANTE', 'PSB', 'UNIÃO', 'PSOL', 'DC', 'PP', 'MOBILIZA', 'MISSÃO', 'SOLIDARIEDADE', 'PRD', 'AGIR', 'DEMOCRATA', 'REDE', 'PV', 'UP', 'CIDADANIA', 'PCDOB', 'PCO', 'PSTU', 'PCB', 'PRTB']
+  - NM_PARTIDO (0.0% nulos, 30 distintos) → ['PARTIDO LIBERAL', 'MOVIMENTO DEMOCRÁTICO BRASILEIRO', 'REPUBLICANOS', 'PARTIDO NOVO', 'PODEMOS', 'PARTIDO SOCIAL DEMOCRÁTICO', 'PARTIDO DEMOCRÁTICO TRABALHISTA', 'PARTIDO DOS TRABALHADORES', 'PARTIDO DA SOCIAL DEMOCRACIA BRASILEIRA', 'AVANTE', 'PARTIDO SOCIALISTA BRASILEIRO', 'UNIÃO BRASIL', 'PARTIDO SOCIALISMO E LIBERDADE', 'DEMOCRACIA CRISTÃ', 'PROGRESSISTAS', 'MOBILIZAÇÃO NACIONAL', 'PARTIDO MISSÃO', 'SOLIDARIEDADE', 'PARTIDO RENOVACAO DEMOCRATICA', 'AGIR', 'DEMOCRATA', 'REDE SUSTENTABILIDADE', 'PARTIDO VERDE', 'UNIDADE POPULAR', 'CIDADANIA', 'PARTIDO COMUNISTA DO BRASIL', 'PARTIDO DA CAUSA OPERÁRIA', 'PARTIDO SOCIALISTA  DOS TRABALHADORES UNIFICADO', 'PARTIDO COMUNISTA BRASILEIRO', 'PARTIDO RENOVADOR TRABALHISTA BRASILEIRO']
+  - NR_FEDERACAO (0.0% nulos, 6 distintos) → ['-1', '104', '101', '100', '102', '103']
+  - NM_FEDERACAO (69.0% nulos, 6 distintos) → ['#NULO', 'FEDERAÇÃO UNIÃO PROGRESSISTA', 'FEDERAÇÃO BRASIL DA ESPERANÇA - FE BRASIL', 'FEDERAÇÃO PSDB CIDADANIA', 'FEDERAÇÃO PSOL REDE', 'FEDERAÇÃO RENOVAÇÃO SOLIDÁRIA']
+  - SG_FEDERACAO (69.0% nulos, 6 distintos) → ['#NULO', '44-UNIÃO/11-PP', '13-PT/65-PC do B/43-PV', '45-PSDB/23-CIDADANIA', '50-PSOL/18-REDE', '25-PRD/77-SOLIDARIEDADE']
+  - DS_COMPOSICAO_FEDERACAO (69.0% nulos, 6 distintos) → ['#NULO', '44-UNIÃO/11-PP', '13-PT/65-PC do B/43-PV', '45-PSDB/23-CIDADANIA', '50-PSOL/18-REDE', '25-PRD/77-SOLIDARIEDADE']
+  - SQ_COLIGACAO (0.0% nulos, 1303 distintos)
+  - NM_COLIGACAO (0.0% nulos, 98 distintos)
+  - DS_COMPOSICAO_COLIGACAO (0.0% nulos, 126 distintos)
+  - SG_UF_NASCIMENTO (0.0% nulos, 29 distintos) → ['SP', 'RJ', 'MG', 'BA', 'PR', 'RS', 'PE', 'CE', 'PA', 'GO', 'MA', 'SC', 'ES', 'PB', 'PI', 'AM', 'DF', 'MS', 'SE', 'AC', 'RN', 'AL', 'MT', 'TO', 'RO', 'AP', 'RR', 'ZZ', 'Não divulgável']
+  - DT_NASCIMENTO (0.0% nulos, 11812 distintos)
+  - NR_TITULO_ELEITORAL_CANDIDATO (0.0% nulos, 20874 distintos)
+  - CD_GENERO (0.0% nulos, 3 distintos) → ['2', '4', '-4']
+  - DS_GENERO (0.0% nulos, 3 distintos) → ['MASCULINO', 'FEMININO', 'NÃO DIVULGÁVEL']
+  - CD_GRAU_INSTRUCAO (0.0% nulos, 8 distintos) → ['8', '6', '7', '5', '3', '4', '2', '-4']
+  - DS_GRAU_INSTRUCAO (0.0% nulos, 8 distintos) → ['SUPERIOR COMPLETO', 'ENSINO MÉDIO COMPLETO', 'SUPERIOR INCOMPLETO', 'ENSINO MÉDIO INCOMPLETO', 'ENSINO FUNDAMENTAL INCOMPLETO', 'ENSINO FUNDAMENTAL COMPLETO', 'LÊ E ESCREVE', 'NÃO DIVULGÁVEL']
+  - CD_ESTADO_CIVIL (0.0% nulos, 6 distintos) → ['3', '1', '9', '5', '7', '-4']
+  - DS_ESTADO_CIVIL (0.0% nulos, 6 distintos) → ['CASADO(A)', 'SOLTEIRO(A)', 'DIVORCIADO(A)', 'VIÚVO(A)', 'SEPARADO(A) JUDICIALMENTE', 'NÃO DIVULGÁVEL']
+  - CD_COR_RACA (0.0% nulos, 6 distintos) → ['01', '03', '02', '05', '04', '-4']
+  - DS_COR_RACA (0.0% nulos, 6 distintos) → ['BRANCA', 'PARDA', 'PRETA', 'INDÍGENA', 'AMARELA', 'NÃO DIVULGÁVEL']
+  - CD_OCUPACAO (0.0% nulos, 211 distintos)
+  - DS_OCUPACAO (0.0% nulos, 211 distintos)
+  - CD_SIT_TOT_TURNO (0.0% nulos, 1 distintos) → ['-1']
+  - DS_SIT_TOT_TURNO (100.0% nulos, 1 distintos) → ['#NULO']
+
+## Layout 3 — 29 arquivo(s), 41,974 linhas no total
+- `consulta_cand_complementar_2026_AC.csv` — 388 linhas, 0.14 MB, latin-1
+- `consulta_cand_complementar_2026_AL.csv` — 299 linhas, 0.11 MB, latin-1
+- `consulta_cand_complementar_2026_AM.csv` — 475 linhas, 0.17 MB, latin-1
+- `consulta_cand_complementar_2026_AP.csv` — 322 linhas, 0.12 MB, latin-1
+- `consulta_cand_complementar_2026_BA.csv` — 1224 linhas, 0.43 MB, latin-1
+- `consulta_cand_complementar_2026_BR.csv` — 28 linhas, 0.01 MB, latin-1
+- `consulta_cand_complementar_2026_BRASIL.csv` — 20987 linhas, 7.58 MB, latin-1
+- `consulta_cand_complementar_2026_CE.csv` — 713 linhas, 0.25 MB, latin-1
+- `consulta_cand_complementar_2026_DF.csv` — 668 linhas, 0.24 MB, latin-1
+- `consulta_cand_complementar_2026_ES.csv` — 591 linhas, 0.21 MB, latin-1
+- `consulta_cand_complementar_2026_GO.csv` — 905 linhas, 0.32 MB, latin-1
+- `consulta_cand_complementar_2026_MA.csv` — 619 linhas, 0.22 MB, latin-1
+- `consulta_cand_complementar_2026_MG.csv` — 1832 linhas, 0.66 MB, latin-1
+- `consulta_cand_complementar_2026_MS.csv` — 425 linhas, 0.15 MB, latin-1
+- `consulta_cand_complementar_2026_MT.csv` — 455 linhas, 0.16 MB, latin-1
+- `consulta_cand_complementar_2026_PA.csv` — 741 linhas, 0.27 MB, latin-1
+- `consulta_cand_complementar_2026_PB.csv` — 450 linhas, 0.16 MB, latin-1
+- `consulta_cand_complementar_2026_PE.csv` — 961 linhas, 0.35 MB, latin-1
+- `consulta_cand_complementar_2026_PI.csv` — 402 linhas, 0.15 MB, latin-1
+- `consulta_cand_complementar_2026_PR.csv` — 1090 linhas, 0.4 MB, latin-1
+- `consulta_cand_complementar_2026_RJ.csv` — 2055 linhas, 0.76 MB, latin-1
+- `consulta_cand_complementar_2026_RN.csv` — 330 linhas, 0.12 MB, latin-1
+- `consulta_cand_complementar_2026_RO.csv` — 438 linhas, 0.16 MB, latin-1
+- `consulta_cand_complementar_2026_RR.csv` — 413 linhas, 0.15 MB, latin-1
+- `consulta_cand_complementar_2026_RS.csv` — 1054 linhas, 0.38 MB, latin-1
+- `consulta_cand_complementar_2026_SC.csv` — 700 linhas, 0.25 MB, latin-1
+- `consulta_cand_complementar_2026_SE.csv` — 411 linhas, 0.15 MB, latin-1
+- `consulta_cand_complementar_2026_SP.csv` — 2630 linhas, 0.97 MB, latin-1
+- `consulta_cand_complementar_2026_TO.csv` — 368 linhas, 0.13 MB, latin-1
+
+  - DT_GERACAO (0.0% nulos, 1 distintos) → ['26/09/2026']
+  - HH_GERACAO (0.0% nulos, 1 distintos) → ['08:31:16']
+  - ANO_ELEICAO (0.0% nulos, 1 distintos) → ['2026']
+  - CD_ELEICAO (0.0% nulos, 2 distintos) → ['6259', '6257']
+  - SQ_CANDIDATO (0.0% nulos, 20987 distintos)
+  - CD_DETALHE_SITUACAO_CAND (0.0% nulos, 1 distintos) → ['-3']
+  - DS_DETALHE_SITUACAO_CAND (100.0% nulos, 1 distintos) → ['#NE']
+  - CD_NACIONALIDADE (0.0% nulos, 5 distintos) → ['1', '2', '4', '-4', '3']
+  - DS_NACIONALIDADE (0.0% nulos, 5 distintos) → ['BRASILEIRA NATA', 'BRASILEIRA (NATURALIZADA)', 'ESTRANGEIRO', 'NÃO DIVULGÁVEL', 'PORTUGUESA COM IGUALDADE DE DIREITOS']
+  - CD_MUNICIPIO_NASCIMENTO (0.0% nulos, 1 distintos) → ['-3']
+  - NM_MUNICIPIO_NASCIMENTO (0.0% nulos, 2747 distintos)
+  - NR_IDADE_DATA_POSSE (0.0% nulos, 73 distintos)
+  - ST_QUILOMBOLA (0.0% nulos, 2 distintos) → ['N', 'S']
+  - CD_ETNIA_INDIGENA (0.0% nulos, 74 distintos)
+  - DS_ETNIA_INDIGENA (43.9% nulos, 74 distintos)
+  - VR_DESPESA_MAX_CAMPANHA (0.0% nulos, 14 distintos) → ['1270629.01', '3176572.53', '-1', '3811887.03', '4447201.54', '7115522.46', '11562724', '5336641.85', '6226082.16', '17788806.16', '3557761.23', '88944030.8', '26683209.24', '-4']
+  - ST_REELEICAO (100.0% nulos, 2 distintos) → ['#NE', 'Não divulgável']
+  - ST_DECLARAR_BENS (0.0% nulos, 3 distintos) → ['S', 'N', 'Não divulgável']
+  - NR_PROTOCOLO_CANDIDATURA (0.0% nulos, 1 distintos) → ['-1']
+  - NR_PROCESSO (0.0% nulos, 20987 distintos)
+  - CD_SITUACAO_CANDIDATO_PLEITO (0.0% nulos, 1 distintos) → ['-3']
+  - DS_SITUACAO_CANDIDATO_PLEITO (100.0% nulos, 1 distintos) → ['#NE']
+  - CD_SITUACAO_CANDIDATO_URNA (0.0% nulos, 1 distintos) → ['-3']
+  - DS_SITUACAO_CANDIDATO_URNA (100.0% nulos, 1 distintos) → ['#NE']
+  - ST_CANDIDATO_INSERIDO_URNA (0.0% nulos, 2 distintos) → ['SIM', 'NÃO']
+  - NM_TIPO_DESTINACAO_VOTOS (9.0% nulos, 4 distintos) → ['Válido', '#NULO', 'Anulado sub judice', 'Nulo técnico']
+  - CD_SITUACAO_CANDIDATO_TOT (0.0% nulos, 8 distintos) → ['2', '-1', '4', '16', '6', '17', '14', '7']
+  - DS_SITUACAO_CANDIDATO_TOT (5.1% nulos, 8 distintos) → ['DEFERIDO', '#NULO', 'INDEFERIDO EM PRAZO RECURSAL OU COM RECURSO', 'DEFERIDO COM RECURSO', 'RENÚNCIA', 'PENDENTE DE JULGAMENTO', 'INDEFERIDO', 'FALECIMENTO']
+  - ST_PREST_CONTAS (0.0% nulos, 2 distintos) → ['S', 'N']
+  - ST_SUBSTITUIDO (0.0% nulos, 2 distintos) → ['N', 'S']
+  - SQ_SUBSTITUIDO (0.0% nulos, 284 distintos)
+  - SQ_ORDEM_SUPLENCIA (0.0% nulos, 1 distintos) → ['-1']
+  - DT_ACEITE_CANDIDATURA (0.0% nulos, 1950 distintos)
+  - CD_SITUACAO_JULGAMENTO (0.0% nulos, 9 distintos) → ['2', '6', '4', '14', '16', '17', '13', '5', '7']
+  - DS_SITUACAO_JULGAMENTO (0.0% nulos, 9 distintos) → ['DEFERIDO', 'RENÚNCIA', 'INDEFERIDO EM PRAZO RECURSAL OU COM RECURSO', 'INDEFERIDO', 'DEFERIDO EM PRAZO RECURSAL OU COM RECURSO', 'PENDENTE DE JULGAMENTO', 'PEDIDO NÃO CONHECIDO', 'CANCELADO', 'FALECIMENTO']
+  - CD_SITUACAO_JULGAMENTO_PLEITO (0.0% nulos, 8 distintos) → ['2', '-1', '4', '16', '6', '17', '14', '7']
+  - DS_SITUACAO_JULGAMENTO_PLEITO (5.1% nulos, 8 distintos) → ['DEFERIDO', '#NULO', 'INDEFERIDO EM PRAZO RECURSAL OU COM RECURSO', 'DEFERIDO COM RECURSO', 'RENÚNCIA', 'PENDENTE DE JULGAMENTO', 'INDEFERIDO', 'FALECIMENTO']
+  - CD_SITUACAO_JULGAMENTO_URNA (0.0% nulos, 5 distintos) → ['2', '-1', '4', '16', '17']
+  - DS_SITUACAO_JULGAMENTO_URNA (5.1% nulos, 5 distintos) → ['DEFERIDO', '#NULO', 'INDEFERIDO EM PRAZO RECURSAL OU COM RECURSO', 'DEFERIDO COM RECURSO', 'PENDENTE DE JULGAMENTO']
+  - CD_SITUACAO_CASSACAO (0.0% nulos, 1 distintos) → ['-1']
+  - DS_SITUACAO_CASSACAO (100.0% nulos, 1 distintos) → ['#NULO']
+  - CD_SITUACAO_CASSACAO_MIDIA (0.0% nulos, 1 distintos) → ['-1']
+  - DS_SITUACAO_CASSACAO_MIDIA (100.0% nulos, 1 distintos) → ['#NULO']
+  - CD_SITUACAO_DIPLOMA (0.0% nulos, 1 distintos) → ['-1']
+  - DS_SITUACAO_DIPLOMA (100.0% nulos, 1 distintos) → ['#NULO']
+  - CD_GENERO_FEFC (0.0% nulos, 4 distintos) → ['2', '4', '-1', '-4']
+  - DS_GENERO_FEFC (1.8% nulos, 4 distintos) → ['MASCULINO', 'FEMININO', '#NULO', 'NÃO DIVULGÁVEL']
+  - CD_COR_RACA_FEFC (0.0% nulos, 7 distintos) → ['1', '3', '2', '-1', '5', '4', '-4']
+  - DS_COR_RACA_FEFC (1.8% nulos, 7 distintos) → ['BRANCA', 'PARDA', 'PRETA', '#NULO', 'INDÍGENA', 'AMARELA', 'NÃO DIVULGÁVEL']
+
+## Layout 4 — 29 arquivo(s), 8,564 linhas no total
+- `consulta_coligacao_2026_AC.csv` — 149 linhas, 0.05 MB, latin-1
+- `consulta_coligacao_2026_AL.csv` — 138 linhas, 0.06 MB, latin-1
+- `consulta_coligacao_2026_AM.csv` — 142 linhas, 0.05 MB, latin-1
+- `consulta_coligacao_2026_AP.csv` — 129 linhas, 0.06 MB, latin-1
+- `consulta_coligacao_2026_BA.csv` — 169 linhas, 0.07 MB, latin-1
+- `consulta_coligacao_2026_BR.csv` — 42 linhas, 0.01 MB, latin-1
+- `consulta_coligacao_2026_BRASIL.csv` — 4282 linhas, 1.62 MB, latin-1
+- `consulta_coligacao_2026_CE.csv` — 176 linhas, 0.07 MB, latin-1
+- `consulta_coligacao_2026_DF.csv` — 189 linhas, 0.07 MB, latin-1
+- `consulta_coligacao_2026_ES.csv` — 148 linhas, 0.05 MB, latin-1
+- `consulta_coligacao_2026_GO.csv` — 154 linhas, 0.06 MB, latin-1
+- `consulta_coligacao_2026_MA.csv` — 156 linhas, 0.06 MB, latin-1
+- `consulta_coligacao_2026_MG.csv` — 170 linhas, 0.06 MB, latin-1
+- `consulta_coligacao_2026_MS.csv` — 155 linhas, 0.06 MB, latin-1
+- `consulta_coligacao_2026_MT.csv` — 152 linhas, 0.06 MB, latin-1
+- `consulta_coligacao_2026_PA.csv` — 163 linhas, 0.06 MB, latin-1
+- `consulta_coligacao_2026_PB.csv` — 149 linhas, 0.06 MB, latin-1
+- `consulta_coligacao_2026_PE.csv` — 177 linhas, 0.07 MB, latin-1
+- `consulta_coligacao_2026_PI.csv` — 156 linhas, 0.05 MB, latin-1
+- `consulta_coligacao_2026_PR.csv` — 167 linhas, 0.07 MB, latin-1
+- `consulta_coligacao_2026_RJ.csv` — 177 linhas, 0.07 MB, latin-1
+- `consulta_coligacao_2026_RN.csv` — 166 linhas, 0.06 MB, latin-1
+- `consulta_coligacao_2026_RO.csv` — 137 linhas, 0.05 MB, latin-1
+- `consulta_coligacao_2026_RR.csv` — 133 linhas, 0.05 MB, latin-1
+- `consulta_coligacao_2026_RS.csv` — 167 linhas, 0.06 MB, latin-1
+- `consulta_coligacao_2026_SC.csv` — 177 linhas, 0.07 MB, latin-1
+- `consulta_coligacao_2026_SE.csv` — 124 linhas, 0.04 MB, latin-1
+- `consulta_coligacao_2026_SP.csv` — 180 linhas, 0.07 MB, latin-1
+- `consulta_coligacao_2026_TO.csv` — 140 linhas, 0.05 MB, latin-1
+
+  - DT_GERACAO (0.0% nulos, 1 distintos) → ['26/09/2026']
+  - HH_GERACAO (0.0% nulos, 1 distintos) → ['08:32:13']
+  - ANO_ELEICAO (0.0% nulos, 1 distintos) → ['2026']
+  - CD_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['2']
+  - NM_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['ELEIÇÃO ORDINÁRIA']
+  - NR_TURNO (0.0% nulos, 1 distintos) → ['1']
+  - CD_ELEICAO (0.0% nulos, 2 distintos) → ['6259', '6257']
+  - DS_ELEICAO (0.0% nulos, 2 distintos) → ['Eleições Gerais Estaduais 2026', 'Eleição Geral Federal 2026']
+  - DT_ELEICAO (0.0% nulos, 1 distintos) → ['04/10/2026']
+  - SG_UF (0.0% nulos, 28 distintos) → ['DF', 'SP', 'SC', 'RJ', 'PE', 'CE', 'MG', 'BA', 'PR', 'RS', 'RN', 'PA', 'PI', 'MA', 'MS', 'GO', 'MT', 'AC', 'PB', 'ES', 'AM', 'TO', 'AL', 'RO', 'RR', 'AP', 'SE', 'BR']
+  - SG_UE (0.0% nulos, 28 distintos) → ['DF', 'SP', 'RJ', 'PE', 'SC', 'CE', 'MG', 'BA', 'RS', 'PR', 'RN', 'PA', 'MA', 'PI', 'MS', 'GO', 'MT', 'PB', 'AC', 'ES', 'AM', 'TO', 'AL', 'RO', 'RR', 'AP', 'SE', 'BR']
+  - NM_UE (0.0% nulos, 28 distintos) → ['DISTRITO FEDERAL', 'SÃO PAULO', 'PERNAMBUCO', 'RIO DE JANEIRO', 'SANTA CATARINA', 'CEARÁ', 'MINAS GERAIS', 'BAHIA', 'RIO GRANDE DO SUL', 'PARANÁ', 'RIO GRANDE DO NORTE', 'PARÁ', 'PIAUÍ', 'MARANHÃO', 'MATO GROSSO DO SUL', 'GOIÁS', 'MATO GROSSO', 'ACRE', 'PARAÍBA', 'ESPÍRITO SANTO', 'AMAZONAS', 'TOCANTINS', 'ALAGOAS', 'RONDÔNIA', 'RORAIMA', 'AMAPÁ', 'SERGIPE', 'BRASIL']
+  - CD_CARGO (0.0% nulos, 10 distintos) → ['6', '9', '5', '10', '3', '4', '7', '8', '1', '2']
+  - DS_CARGO (0.0% nulos, 10 distintos) → ['DEPUTADO FEDERAL', '2º SUPLENTE', '1º SUPLENTE', 'SENADOR', 'GOVERNADOR', 'VICE-GOVERNADOR', 'DEPUTADO ESTADUAL', 'DEPUTADO DISTRITAL', 'VICE-PRESIDENTE', 'PRESIDENTE']
+  - TP_AGREMIACAO (0.0% nulos, 3 distintos) → ['COLIGAÇÃO', 'PARTIDO ISOLADO', 'FEDERAÇÃO']
+  - NR_PARTIDO (0.0% nulos, 30 distintos) → ['13', '65', '43', '22', '44', '11', '15', '55', '10', '12', '20', '50', '18', '30', '45', '23', '25', '77', '40', '27', '70', '80', '29', '35', '36', '16', '33', '14', '21', '28']
+  - SG_PARTIDO (0.0% nulos, 30 distintos) → ['PCDOB', 'PV', 'PT', 'PL', 'PP', 'UNIÃO', 'PSD', 'MDB', 'REPUBLICANOS', 'PDT', 'PODE', 'NOVO', 'REDE', 'PSOL', 'CIDADANIA', 'PSDB', 'SOLIDARIEDADE', 'PRD', 'PSB', 'AVANTE', 'DC', 'UP', 'PCO', 'DEMOCRATA', 'AGIR', 'PSTU', 'MOBILIZA', 'MISSÃO', 'PCB', 'PRTB']
+  - NM_PARTIDO (0.0% nulos, 30 distintos) → ['PARTIDO VERDE', 'PARTIDO COMUNISTA DO BRASIL', 'PARTIDO DOS TRABALHADORES', 'PARTIDO LIBERAL', 'UNIÃO BRASIL', 'PROGRESSISTAS', 'PARTIDO SOCIAL DEMOCRÁTICO', 'MOVIMENTO DEMOCRÁTICO BRASILEIRO', 'REPUBLICANOS', 'PARTIDO DEMOCRÁTICO TRABALHISTA', 'PODEMOS', 'PARTIDO SOCIALISMO E LIBERDADE', 'PARTIDO NOVO', 'REDE SUSTENTABILIDADE', 'PARTIDO DA SOCIAL DEMOCRACIA BRASILEIRA', 'CIDADANIA', 'SOLIDARIEDADE', 'PARTIDO RENOVACAO DEMOCRATICA', 'PARTIDO SOCIALISTA BRASILEIRO', 'AVANTE', 'DEMOCRACIA CRISTÃ', 'UNIDADE POPULAR', 'PARTIDO DA CAUSA OPERÁRIA', 'DEMOCRATA', 'AGIR', 'PARTIDO SOCIALISTA  DOS TRABALHADORES UNIFICADO', 'MOBILIZAÇÃO NACIONAL', 'PARTIDO MISSÃO', 'PARTIDO COMUNISTA BRASILEIRO', 'PARTIDO RENOVADOR TRABALHISTA BRASILEIRO']
+  - NR_FEDERACAO (0.0% nulos, 6 distintos) → ['-1', '101', '104', '102', '100', '103']
+  - NM_FEDERACAO (55.4% nulos, 6 distintos) → ['#NULO', 'FEDERAÇÃO BRASIL DA ESPERANÇA - FE BRASIL', 'FEDERAÇÃO UNIÃO PROGRESSISTA', 'FEDERAÇÃO PSOL REDE', 'FEDERAÇÃO PSDB CIDADANIA', 'FEDERAÇÃO RENOVAÇÃO SOLIDÁRIA']
+  - SG_FEDERACAO (55.4% nulos, 6 distintos) → ['#NULO', '13-PT/65-PC do B/43-PV', '44-UNIÃO/11-PP', '50-PSOL/18-REDE', '45-PSDB/23-CIDADANIA', '25-PRD/77-SOLIDARIEDADE']
+  - DS_COMPOSICAO_FEDERACAO (55.4% nulos, 6 distintos) → ['#NULO', '13-PT/65-PC do B/43-PV', '44-UNIÃO/11-PP', '50-PSOL/18-REDE', '45-PSDB/23-CIDADANIA', '25-PRD/77-SOLIDARIEDADE']
+  - SQ_COLIGACAO (0.0% nulos, 1307 distintos)
+  - NM_COLIGACAO (47.1% nulos, 97 distintos)
+  - DS_COMPOSICAO_COLIGACAO (0.0% nulos, 126 distintos)
+  - CD_SITUACAO_LEGENDA (0.0% nulos, 6 distintos) → ['D', 'DR', 'IR', 'IN', 'IV', 'PJ']
+  - DS_SITUACAO (0.0% nulos, 6 distintos) → ['DEFERIDO', 'DEFERIDO COM RECURSO', 'INDEFERIDO COM RECURSO', 'INDEFERIDO', 'INVALIDADO', 'PENDENTE JULGAMENTO']
+  - NM_TIPO_DESTINACAO_VOTOS (68.1% nulos, 5 distintos) → ['#NE', 'Válido (legenda)', 'Válido', 'Anulado sub judice', 'Nulo técnico']
+
+## Layout 5 — 29 arquivo(s), 382 linhas no total
+- `consulta_vagas_2026_AC.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_AL.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_AM.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_AP.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_BA.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_BR.csv` — 2 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_BRASIL.csv` — 191 linhas, 0.03 MB, latin-1
+- `consulta_vagas_2026_CE.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_DF.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_ES.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_GO.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_MA.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_MG.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_MS.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_MT.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_PA.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_PB.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_PE.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_PI.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_PR.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_RJ.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_RN.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_RO.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_RR.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_RS.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_SC.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_SE.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_SP.csv` — 7 linhas, 0.0 MB, latin-1
+- `consulta_vagas_2026_TO.csv` — 7 linhas, 0.0 MB, latin-1
+
+  - DT_GERACAO (0.0% nulos, 1 distintos) → ['26/09/2026']
+  - HH_GERACAO (0.0% nulos, 1 distintos) → ['08:32:04']
+  - ANO_ELEICAO (0.0% nulos, 1 distintos) → ['2026']
+  - CD_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['2']
+  - NM_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['Eleição Ordinária']
+  - CD_ELEICAO (0.0% nulos, 2 distintos) → ['6259', '6257']
+  - DS_ELEICAO (0.0% nulos, 2 distintos) → ['Eleições Gerais Estaduais 2026', 'Eleição Geral Federal 2026']
+  - DT_ELEICAO (0.0% nulos, 1 distintos) → ['04/10/2026']
+  - DT_POSSE (0.0% nulos, 6 distintos) → ['02/05/2027', '06/01/2027', '01/05/2027', '05/01/2027', '05/04/2027', '03/05/2027']
+  - SG_UF (0.0% nulos, 28 distintos) → ['AC', 'SE', 'RS', 'MA', 'MG', 'DF', 'PA', 'GO', 'PI', 'AL', 'MT', 'SP', 'AM', 'MS', 'PE', 'BA', 'ES', 'PB', 'CE', 'RO', 'RR', 'AP', 'TO', 'PR', 'RJ', 'RN', 'SC', 'BR']
+  - SG_UE (0.0% nulos, 28 distintos) → ['AC', 'RR', 'RS', 'AL', 'MT', 'SP', 'BA', 'GO', 'PB', 'AM', 'MS', 'PE', 'PA', 'RN', 'MA', 'MG', 'SC', 'DF', 'AP', 'PI', 'PR', 'RJ', 'TO', 'SE', 'CE', 'RO', 'ES', 'BR']
+  - NM_UE (0.0% nulos, 28 distintos) → ['RONDÔNIA', 'SANTA CATARINA', 'MATO GROSSO', 'PARÁ', 'MARANHÃO', 'MINAS GERAIS', 'PARAÍBA', 'RORAIMA', 'ALAGOAS', 'GOIÁS', 'ACRE', 'DISTRITO FEDERAL', 'SÃO PAULO', 'ESPÍRITO SANTO', 'RIO DE JANEIRO', 'SERGIPE', 'AMAPÁ', 'BAHIA', 'CEARÁ', 'PIAUÍ', 'RIO GRANDE DO NORTE', 'MATO GROSSO DO SUL', 'TOCANTINS', 'RIO GRANDE DO SUL', 'AMAZONAS', 'PARANÁ', 'PERNAMBUCO', 'BRASIL']
+  - CD_CARGO (0.0% nulos, 10 distintos) → ['10', '6', '5', '9', '3', '4', '7', '8', '1', '2']
+  - DS_CARGO (0.0% nulos, 10 distintos) → ['Governador', 'Deputado Federal', 'Senador', '2. Suplente', '1. Suplente', 'Vice-governador', 'Deputado Estadual', 'Presidente', 'Vice-presidente', 'Deputado Distrital']
+  - QT_VAGA (0.0% nulos, 29 distintos) → ['2', '1', '24', '8', '30', '17', '10', '46', '70', '41', '63', '18', '42', '55', '16', '49', '22', '77', '36', '39', '27', '31', '12', '54', '9', '40', '53', '94', '25']
+
+## Layout 6 — 29 arquivo(s), 111,908 linhas no total
+- `historico_candidatura_2026_AC.csv` — 974 linhas, 0.3 MB, latin-1
+- `historico_candidatura_2026_AL.csv` — 848 linhas, 0.26 MB, latin-1
+- `historico_candidatura_2026_AM.csv` — 1359 linhas, 0.42 MB, latin-1
+- `historico_candidatura_2026_AP.csv` — 810 linhas, 0.25 MB, latin-1
+- `historico_candidatura_2026_BA.csv` — 3219 linhas, 0.99 MB, latin-1
+- `historico_candidatura_2026_BR.csv` — 51 linhas, 0.02 MB, latin-1
+- `historico_candidatura_2026_BRASIL.csv` — 55954 linhas, 17.38 MB, latin-1
+- `historico_candidatura_2026_CE.csv` — 1984 linhas, 0.61 MB, latin-1
+- `historico_candidatura_2026_DF.csv` — 991 linhas, 0.32 MB, latin-1
+- `historico_candidatura_2026_ES.csv` — 1573 linhas, 0.49 MB, latin-1
+- `historico_candidatura_2026_GO.csv` — 2460 linhas, 0.76 MB, latin-1
+- `historico_candidatura_2026_MA.csv` — 1814 linhas, 0.56 MB, latin-1
+- `historico_candidatura_2026_MG.csv` — 5059 linhas, 1.58 MB, latin-1
+- `historico_candidatura_2026_MS.csv` — 1209 linhas, 0.38 MB, latin-1
+- `historico_candidatura_2026_MT.csv` — 1274 linhas, 0.4 MB, latin-1
+- `historico_candidatura_2026_PA.csv` — 1947 linhas, 0.6 MB, latin-1
+- `historico_candidatura_2026_PB.csv` — 1422 linhas, 0.44 MB, latin-1
+- `historico_candidatura_2026_PE.csv` — 2556 linhas, 0.8 MB, latin-1
+- `historico_candidatura_2026_PI.csv` — 951 linhas, 0.3 MB, latin-1
+- `historico_candidatura_2026_PR.csv` — 3240 linhas, 1.0 MB, latin-1
+- `historico_candidatura_2026_RJ.csv` — 5179 linhas, 1.63 MB, latin-1
+- `historico_candidatura_2026_RN.csv` — 790 linhas, 0.25 MB, latin-1
+- `historico_candidatura_2026_RO.csv` — 1080 linhas, 0.34 MB, latin-1
+- `historico_candidatura_2026_RR.csv` — 958 linhas, 0.3 MB, latin-1
+- `historico_candidatura_2026_RS.csv` — 2891 linhas, 0.91 MB, latin-1
+- `historico_candidatura_2026_SC.csv` — 1879 linhas, 0.58 MB, latin-1
+- `historico_candidatura_2026_SE.csv` — 1135 linhas, 0.35 MB, latin-1
+- `historico_candidatura_2026_SP.csv` — 7255 linhas, 2.25 MB, latin-1
+- `historico_candidatura_2026_TO.csv` — 1046 linhas, 0.32 MB, latin-1
+
+  - DT_GERACAO (0.0% nulos, 1 distintos) → ['26/09/2026']
+  - HH_GERACAO (0.0% nulos, 1 distintos) → ['08:36:51']
+  - ANO_ELEICAO_ATUAL (0.0% nulos, 1 distintos) → ['2026']
+  - SQ_CANDIDATO_ATUAL (0.0% nulos, 19156 distintos)
+  - SG_UF_ATUAL (0.0% nulos, 28 distintos) → ['SP', 'RJ', 'MG', 'PR', 'BA', 'RS', 'PE', 'GO', 'CE', 'PA', 'SC', 'MA', 'ES', 'PB', 'AM', 'MT', 'MS', 'SE', 'RO', 'TO', 'DF', 'AC', 'RR', 'PI', 'AL', 'AP', 'RN', 'BR']
+  - ANO_ELEICAO (0.0% nulos, 12 distintos) → ['2026', '2024', '2020', '2022', '2016', '2018', '2012', '2008', '2014', '2004', '2010', '2006']
+  - CD_TIPO_ELEICAO (0.0% nulos, 2 distintos) → ['2', '1']
+  - NM_TIPO_ELEICAO (0.0% nulos, 2 distintos) → ['Eleição Ordinária', 'Eleição Suplementar']
+  - NR_TURNO (0.0% nulos, 2 distintos) → ['1', '2']
+  - CD_ELEICAO (0.0% nulos, 90 distintos)
+  - DS_ELEICAO (0.0% nulos, 90 distintos)
+  - DT_ELEICAO (0.0% nulos, 74 distintos)
+  - TP_ABRANGENCIA_ELEICAO (0.0% nulos, 3 distintos) → ['M', 'E', 'F']
+  - SG_UF (0.0% nulos, 28 distintos) → ['SP', 'RJ', 'MG', 'PR', 'BA', 'RS', 'PE', 'GO', 'CE', 'PA', 'SC', 'MA', 'ES', 'PB', 'AM', 'MT', 'MS', 'SE', 'RO', 'TO', 'DF', 'AC', 'RR', 'PI', 'AL', 'AP', 'RN', 'BR']
+  - SG_UE (0.0% nulos, 2184 distintos)
+  - NM_UE (0.0% nulos, 2507 distintos)
+  - CD_CARGO (0.0% nulos, 13 distintos) → ['13', '7', '6', '11', '12', '8', '5', '3', '4', '9', '10', '1', '2']
+  - DS_CARGO (0.0% nulos, 18 distintos) → ['Vereador', 'Deputado Estadual', 'Deputado Federal', 'Prefeito', 'Vice-prefeito', 'Deputado Distrital', 'Senador', 'Governador', '1º Suplente', 'Vice-Prefeito', 'Vice-governador', '2º Suplente', 'Vice-Governador', 'Presidente', '1º Suplente Senador', '2º Suplente Senador', 'Vice-presidente', 'Vice-Presidente']
+  - SQ_CANDIDATO (0.0% nulos, 52578 distintos)
+  - NR_CANDIDATO (0.0% nulos, 8517 distintos)
+  - NM_CANDIDATO (0.0% nulos, 23694 distintos)
+  - NM_URNA_CANDIDATO (0.0% nulos, 28120 distintos)
+  - NR_PARTIDO (0.0% nulos, 38 distintos)
+  - SG_PARTIDO (0.0% nulos, 54 distintos)
+  - NM_PARTIDO (0.0% nulos, 79 distintos)
+  - CD_SITUACAO_CANDIDATURA (0.0% nulos, 4 distintos) → ['12', '-3', '3', '1']
+  - DS_SITUACAO_CANDIDATURA (34.7% nulos, 4 distintos) → ['Apto', '#NE', 'Inapto', 'Cadastrado']
+  - CD_SITUACAO_JULGAMENTO (4.7% nulos, 10 distintos) → ['-3', '2', None, '6', '4', '14', '16', '17', '13', '5', '7']
+  - DS_SITUACAO_JULGAMENTO (65.3% nulos, 10 distintos) → ['#NE', 'Deferido', None, 'Renúncia', 'Indeferido em prazo recursal ou com recurso', 'Indeferido', 'Deferido em prazo recursal ou com recurso', 'Pendente de julgamento', 'Pedido não conhecido', 'Cancelado', 'Falecimento']
+  - CD_SIT_TOT_TURNO (0.0% nulos, 14 distintos) → ['5', '-1', '4', '2', '1', '3', '6', '8', '11', '13', '10', '9', '14', '7']
+  - DS_SIT_TOT_TURNO (23.4% nulos, 14 distintos) → ['Suplente', '#NULO', 'Não eleito', 'Eleito por QP', 'Eleito', 'Eleito por média', '2º turno', 'Registro negado antes da eleição', 'Indeferido com Recurso', 'Renúncia/falecimento/cassação antes da eleição', 'Substituído', 'RENÚNCIA/FALECIMENTO COM SUBSTITUIÇÃO', 'Registro negado após a eleição', 'Renúncia/falecimento/cassação após a eleição']
+
+## Layout 7 — 29 arquivo(s), 2,734 linhas no total
+- `motivo_cassacao_2026_AC.csv` — 25 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_AL.csv` — 24 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_AM.csv` — 12 linhas, 0.0 MB, latin-1
+- `motivo_cassacao_2026_AP.csv` — 18 linhas, 0.0 MB, latin-1
+- `motivo_cassacao_2026_BA.csv` — 46 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_BR.csv` — 2 linhas, 0.0 MB, latin-1
+- `motivo_cassacao_2026_BRASIL.csv` — 1367 linhas, 0.3 MB, latin-1
+- `motivo_cassacao_2026_CE.csv` — 13 linhas, 0.0 MB, latin-1
+- `motivo_cassacao_2026_DF.csv` — 35 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_ES.csv` — 10 linhas, 0.0 MB, latin-1
+- `motivo_cassacao_2026_GO.csv` — 29 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_MA.csv` — 31 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_MG.csv` — 47 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_MS.csv` — 8 linhas, 0.0 MB, latin-1
+- `motivo_cassacao_2026_MT.csv` — 14 linhas, 0.0 MB, latin-1
+- `motivo_cassacao_2026_PA.csv` — 45 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_PB.csv` — 27 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_PE.csv` — 147 linhas, 0.04 MB, latin-1
+- `motivo_cassacao_2026_PI.csv` — 88 linhas, 0.02 MB, latin-1
+- `motivo_cassacao_2026_PR.csv` — 59 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_RJ.csv` — 160 linhas, 0.03 MB, latin-1
+- `motivo_cassacao_2026_RN.csv` — 12 linhas, 0.0 MB, latin-1
+- `motivo_cassacao_2026_RO.csv` — 10 linhas, 0.0 MB, latin-1
+- `motivo_cassacao_2026_RR.csv` — 20 linhas, 0.0 MB, latin-1
+- `motivo_cassacao_2026_RS.csv` — 84 linhas, 0.02 MB, latin-1
+- `motivo_cassacao_2026_SC.csv` — 26 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_SE.csv` — 40 linhas, 0.01 MB, latin-1
+- `motivo_cassacao_2026_SP.csv` — 323 linhas, 0.07 MB, latin-1
+- `motivo_cassacao_2026_TO.csv` — 12 linhas, 0.0 MB, latin-1
+
+  - DT_GERACAO (0.0% nulos, 1 distintos) → ['26/09/2026']
+  - HH_GERACAO (0.0% nulos, 1 distintos) → ['08:32:38']
+  - ANO_ELEICAO (0.0% nulos, 1 distintos) → ['2026']
+  - CD_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['2']
+  - NM_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['Eleição Ordinária']
+  - CD_ELEICAO (0.0% nulos, 2 distintos) → ['6259', '6257']
+  - DS_ELEICAO (0.0% nulos, 2 distintos) → ['Eleições Gerais Estaduais 2026', 'Eleição Geral Federal 2026']
+  - SG_UF (0.0% nulos, 28 distintos) → ['SP', 'RJ', 'PE', 'PI', 'RS', 'PR', 'MG', 'BA', 'PA', 'SE', 'DF', 'MA', 'GO', 'PB', 'SC', 'AC', 'AL', 'RR', 'AP', 'MT', 'CE', 'RN', 'TO', 'AM', 'ES', 'RO', 'MS', 'BR']
+  - SG_UE (0.0% nulos, 28 distintos) → ['SP', 'RJ', 'PE', 'PI', 'RS', 'PR', 'MG', 'BA', 'PA', 'SE', 'DF', 'MA', 'GO', 'PB', 'SC', 'AC', 'AL', 'RR', 'AP', 'MT', 'CE', 'AM', 'TO', 'RN', 'ES', 'RO', 'MS', 'BR']
+  - NM_UE (0.0% nulos, 28 distintos) → ['SÃO PAULO', 'RIO DE JANEIRO', 'PERNAMBUCO', 'PIAUÍ', 'RIO GRANDE DO SUL', 'PARANÁ', 'MINAS GERAIS', 'BAHIA', 'PARÁ', 'SERGIPE', 'DISTRITO FEDERAL', 'MARANHÃO', 'GOIÁS', 'PARAÍBA', 'SANTA CATARINA', 'ACRE', 'ALAGOAS', 'RORAIMA', 'AMAPÁ', 'MATO GROSSO', 'CEARÁ', 'RIO GRANDE DO NORTE', 'AMAZONAS', 'TOCANTINS', 'RONDÔNIA', 'ESPÍRITO SANTO', 'MATO GROSSO DO SUL', 'BRASIL']
+  - SQ_CANDIDATO (0.0% nulos, 1074 distintos)
+  - NR_PROCESSO (0.0% nulos, 1 distintos) → ['-1']
+  - DS_TP_MOTIVO (0.0% nulos, 1 distintos) → ['Fundamentos legais de julgamento']
+  - DS_MOTIVO (0.0% nulos, 10 distintos) → ['Desatendimento a requisito formal (Lei 9.504/97)', 'Ausência de condição de elegibilidade', 'Indeferimento do DRAP do partido político/federação/coligação', 'Ausência de quitação eleitoral (Lei 9.504/97)', 'Inelegibilidade infraconstitucional(LC 64/90)', 'Indeferimento do DRAP do partido político/federação/coligação por não cumprimento da cota de gênero', 'Ausência de desincompatibilização (LC 64/90)', 'Outros', 'Inelegibilidade constitucional', 'Candidatura não autorizada pelo(a) candidato(a)']
+
+## Layout 8 — 29 arquivo(s), 125,720 linhas no total
+- `rede_social_candidato_2026_AC.csv` — 538 linhas, 0.09 MB, latin-1
+- `rede_social_candidato_2026_AL.csv` — 345 linhas, 0.05 MB, latin-1
+- `rede_social_candidato_2026_AM.csv` — 1796 linhas, 0.29 MB, latin-1
+- `rede_social_candidato_2026_AP.csv` — 822 linhas, 0.13 MB, latin-1
+- `rede_social_candidato_2026_BA.csv` — 2892 linhas, 0.44 MB, latin-1
+- `rede_social_candidato_2026_BR.csv` — 245 linhas, 0.04 MB, latin-1
+- `rede_social_candidato_2026_BRASIL.csv` — 62860 linhas, 9.87 MB, latin-1
+- `rede_social_candidato_2026_CE.csv` — 3298 linhas, 0.52 MB, latin-1
+- `rede_social_candidato_2026_DF.csv` — 2254 linhas, 0.35 MB, latin-1
+- `rede_social_candidato_2026_ES.csv` — 2025 linhas, 0.32 MB, latin-1
+- `rede_social_candidato_2026_GO.csv` — 2032 linhas, 0.32 MB, latin-1
+- `rede_social_candidato_2026_MA.csv` — 1116 linhas, 0.18 MB, latin-1
+- `rede_social_candidato_2026_MG.csv` — 5142 linhas, 0.79 MB, latin-1
+- `rede_social_candidato_2026_MS.csv` — 1304 linhas, 0.21 MB, latin-1
+- `rede_social_candidato_2026_MT.csv` — 1353 linhas, 0.21 MB, latin-1
+- `rede_social_candidato_2026_PA.csv` — 2003 linhas, 0.32 MB, latin-1
+- `rede_social_candidato_2026_PB.csv` — 738 linhas, 0.11 MB, latin-1
+- `rede_social_candidato_2026_PE.csv` — 2278 linhas, 0.36 MB, latin-1
+- `rede_social_candidato_2026_PI.csv` — 841 linhas, 0.13 MB, latin-1
+- `rede_social_candidato_2026_PR.csv` — 6372 linhas, 1.01 MB, latin-1
+- `rede_social_candidato_2026_RJ.csv` — 5692 linhas, 0.91 MB, latin-1
+- `rede_social_candidato_2026_RN.csv` — 834 linhas, 0.13 MB, latin-1
+- `rede_social_candidato_2026_RO.csv` — 1399 linhas, 0.22 MB, latin-1
+- `rede_social_candidato_2026_RR.csv` — 797 linhas, 0.13 MB, latin-1
+- `rede_social_candidato_2026_RS.csv` — 4192 linhas, 0.66 MB, latin-1
+- `rede_social_candidato_2026_SC.csv` — 2133 linhas, 0.34 MB, latin-1
+- `rede_social_candidato_2026_SE.csv` — 818 linhas, 0.13 MB, latin-1
+- `rede_social_candidato_2026_SP.csv` — 8821 linhas, 1.38 MB, latin-1
+- `rede_social_candidato_2026_TO.csv` — 780 linhas, 0.13 MB, latin-1
+
+  - DT_GERACAO (0.0% nulos, 1 distintos) → ['26/09/2026']
+  - HH_GERACAO (0.0% nulos, 1 distintos) → ['08:31:11']
+  - AA_ELEICAO (0.0% nulos, 1 distintos) → ['2026']
+  - SG_UF (0.0% nulos, 28 distintos) → ['SP', 'PR', 'RJ', 'MG', 'RS', 'CE', 'BA', 'PE', 'DF', 'SC', 'GO', 'ES', 'PA', 'AM', 'RO', 'MT', 'MS', 'MA', 'PI', 'RN', 'AP', 'SE', 'RR', 'TO', 'PB', 'AC', 'AL', 'BR']
+  - CD_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['2']
+  - NM_TIPO_ELEICAO (0.0% nulos, 1 distintos) → ['ELEIÇÃO ORDINÁRIA']
+  - CD_ELEICAO (0.0% nulos, 2 distintos) → ['6259', '6257']
+  - DS_ELEICAO (0.0% nulos, 2 distintos) → ['ELEIÇÕES GERAIS ESTADUAIS 2026', 'ELEIÇÃO GERAL FEDERAL 2026']
+  - SQ_CANDIDATO (0.0% nulos, 18526 distintos)
+  - NR_ORDEM_REDE_SOCIAL (0.0% nulos, 913 distintos)
+  - DS_URL (0.0% nulos, 61444 distintos)
