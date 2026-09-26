@@ -79,3 +79,15 @@ def cliente(banco_v1):
     from app.main import criar_app
     with TestClient(criar_app(banco_v1)) as c:
         yield c
+
+
+@pytest.fixture(scope="session")
+def cliente_v3(tmp_path_factory):
+    """Banco v3: v1 + candidatos em outro cargo (40) e outra UF (41)."""
+    from fastapi.testclient import TestClient
+    from app.main import criar_app
+    dados = gerar(tmp_path_factory.mktemp("dados_v3"), "v3")
+    banco = tmp_path_factory.mktemp("banco_v3") / "eleicoes.duckdb"
+    ingerir(dados, banco)
+    with TestClient(criar_app(banco)) as c:
+        yield c

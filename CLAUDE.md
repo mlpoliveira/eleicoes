@@ -51,6 +51,12 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
   estatísticas), gera a descrição em texto e os alertas (cargos/UFs misturados, n < 30).
   Estatísticas: registros sem o dado ficam fora do cálculo e são contados em `n_sem_dado` com o
   motivo; posição do candidato = percentil (posição média) + relação com a mediana, nunca "nº X de Y".
+  `rotas/comparar.py` (`GET /api/comparar?sq=1&sq=2` ou `?sq=1,2`, 2 a 5): tabela lado a lado com
+  fonte por valor, verificações (mesmo cargo/UF/partido, histórico e bens disponíveis, mesma pessoa),
+  alertas e "Principais diferenças encontradas nos dados" (só fatos; moeda não formatada no texto).
+- Teste de neutralidade automatizado em `tests/test_api_comparar.py` (regex de termos avaliativos
+  sobre o texto gerado; valores vindos da base são retirados antes). Gerador `v3` = v1 + candidatos
+  em outro cargo (40) e outra UF (41).
 - Categorias de bens: mapa versionado `ingestao/categorias_bens.csv` (tipo;categoria;observacao,
   UTF-8) carregado na ingestão como tabela `categoria_bem`; `bem.categoria` é CÁLCULO. Tipo fora do
   mapa fica com categoria NULL e é medido em `qualidade`. Mudou o mapa? Rodar a ingestão com `--forcar`.

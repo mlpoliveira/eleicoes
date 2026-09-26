@@ -10,7 +10,7 @@ from pathlib import Path
 from fastapi import FastAPI
 
 from .db import Banco, caminho_banco
-from .rotas import bens, candidato, candidatos, estatisticas
+from .rotas import bens, candidato, candidatos, comparar, estatisticas
 
 
 def criar_app(banco: Path | None = None) -> FastAPI:
@@ -28,6 +28,7 @@ def criar_app(banco: Path | None = None) -> FastAPI:
     app.include_router(candidatos.router)
     app.include_router(candidato.router)
     app.include_router(bens.router)
+    app.include_router(comparar.router)
     return app
 
 
