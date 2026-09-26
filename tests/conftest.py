@@ -10,8 +10,13 @@ import subprocess
 import sys
 from pathlib import Path
 
+import os
+
 import duckdb
 import pytest
+
+# Testes nunca leem o .env local (onde fica a chave real da IA) — ver backend/app/config.py
+os.environ["ELEICOES_SEM_DOTENV"] = "1"
 
 RAIZ = Path(__file__).resolve().parent.parent
 GERADOR = RAIZ / "tests" / "gerar_dados_sinteticos.py"

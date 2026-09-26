@@ -146,6 +146,9 @@ Tabelas finais (reconstruídas a partir da última carga):
 
 CPF, título eleitoral e e-mail são descartados na leitura e não existem no banco.
 O arquivo `eleicoes.chave` (chave do `pessoa_id`) **nunca** vai para o Git (ver `.gitignore`).
+O arquivo `.env` (chave da IA e configuração local) **nunca** vai para o Git; modelo sem segredos em
+`.env.exemplo`. A API lê o `.env` da raiz ao iniciar (`backend/app/config.py`; o terminal tem
+prioridade; os testes nunca leem — `ELEICOES_SEM_DOTENV=1` no `conftest.py`).
 Nunca expor `pessoa_id` na UI ou em exportações.
 
 ## Stack

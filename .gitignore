@@ -1,6 +1,14 @@
 # Chave do pessoa_id — NUNCA versionar (permitiria reverter o identificador)
 *.chave
 
+# Segredos (chave da IA etc.) — NUNCA versionar. Modelo sem segredos: .env.exemplo
+.env
+.env.*
+!.env.exemplo
+
+# Scripts locais de consulta
+consulta.py
+
 # Banco e dados do TSE (grandes e regeneráveis a partir da fonte oficial)
 *.duckdb
 *.duckdb.wal
