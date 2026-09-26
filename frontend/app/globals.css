@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+/* Tokens de cor. Série de dados: um único tom (gráficos de uma série — dataviz, paleta de
+   referência slot 1), validado para superfície clara e escura. */
+:root {
+  color-scheme: light;
+  --fundo: #f4f4f2;
+  --superficie: #fcfcfb;
+  --superficie-2: #efeeea;
+  --borda: #deddd7;
+  --texto: #0b0b0b;
+  --texto-2: #52514e;
+  --texto-3: #6f6e69;
+  --serie-1: #2a78d6;
+  --grade: #e6e5e0;
+  --destaque: #1f5fae;
+  --aviso-fundo: #fdf3dc;
+  --aviso-borda: #e3c26f;
+  --aviso-texto: #5c4300;
+  --ausente: #6f6e69;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --fundo: #111110;
+    --superficie: #1a1a19;
+    --superficie-2: #242422;
+    --borda: #34332f;
+    --texto: #ffffff;
+    --texto-2: #c3c2b7;
+    --texto-3: #9d9c93;
+    --serie-1: #3987e5;
+    --grade: #2c2c29;
+    --destaque: #8cb8f0;
+    --aviso-fundo: #2d2512;
+    --aviso-borda: #7a6128;
+    --aviso-texto: #f0d995;
+    --ausente: #a3a298;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --fundo: #111110;
+  --superficie: #1a1a19;
+  --superficie-2: #242422;
+  --borda: #34332f;
+  --texto: #ffffff;
+  --texto-2: #c3c2b7;
+  --texto-3: #9d9c93;
+  --serie-1: #3987e5;
+  --grade: #2c2c29;
+  --destaque: #8cb8f0;
+  --aviso-fundo: #2d2512;
+  --aviso-borda: #7a6128;
+  --aviso-texto: #f0d995;
+  --ausente: #a3a298;
+}
+
+@theme inline {
+  --color-fundo: var(--fundo);
+  --color-superficie: var(--superficie);
+  --color-superficie-2: var(--superficie-2);
+  --color-borda: var(--borda);
+  --color-texto: var(--texto);
+  --color-texto-2: var(--texto-2);
+  --color-texto-3: var(--texto-3);
+  --color-serie: var(--serie-1);
+  --color-destaque: var(--destaque);
+  --color-aviso-fundo: var(--aviso-fundo);
+  --color-aviso-borda: var(--aviso-borda);
+  --color-aviso-texto: var(--aviso-texto);
+  --color-ausente: var(--ausente);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: var(--font-sans);
+}
+
+/* Valor ausente: sempre em texto, nunca vazio ou zero */
+.ausente {
+  color: var(--ausente);
+  font-style: italic;
+}
+
+:focus-visible {
+  outline: 2px solid var(--destaque);
+  outline-offset: 2px;
+}

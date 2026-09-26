@@ -38,7 +38,7 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
 - `ingestao/ingestao_tse.py`: carga versionada em DuckDB (`eleicoes.duckdb`). Uso:
   `python ingestao/ingestao_tse.py "<pasta dos zips>"`. Rodar de novo com nova geração do TSE
   cria nova carga e registra diferenças em `alteracao`.
-- Estrutura: `ingestao/`, `backend/`, `frontend/` (vazio), `tests/`, `docs/`
+- Estrutura: `ingestao/`, `backend/`, `frontend/`, `tests/`, `docs/`
   (`docs/inventario_tse.md` = saída do inventário).
 - API (`backend/app/`): `ELEICOES_DB=eleicoes.duckdb uvicorn app.main:app --app-dir backend`.
   `db.py` (conexão read-only, cursor por requisição), `metadados.py` (natureza + fonte TSE de cada
@@ -54,6 +54,15 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
   `rotas/comparar.py` (`GET /api/comparar?sq=1&sq=2` ou `?sq=1,2`, 2 a 5): tabela lado a lado com
   fonte por valor, verificações (mesmo cargo/UF/partido, histórico e bens disponíveis, mesma pessoa),
   alertas e "Principais diferenças encontradas nos dados" (só fatos; moeda não formatada no texto).
+- Frontend (`frontend/`, Next.js 16 + React 19 + Tailwind 4 + ECharts): `npm install`, `npm run build`,
+  `npm start` (porta 3000; `API_URL` = backend, padrão http://localhost:8000 — `/api/*` é repassado
+  pelo `next.config.ts`). Telas: Início (cartões + candidaturas por cargo + patrimônio, com filtros),
+  Candidatos (busca com filtros/ordenação/paginação na URL), Candidato (`/candidatos/[sq]`) e Comparar
+  (seleção de até 5 no localStorage). `components/FiguraGrafico` exige título, unidade, universo,
+  período e fonte e oferece "Ver tabela"; `SeloNatureza` + `VerFonte` em cada campo; cores como
+  tokens em `app/globals.css` (claro/escuro). Moeda formatada só em `lib/formato.ts`; códigos
+  (sq_/nr_/cd_) nunca ganham separador de milhar. Checagem: `npm run typecheck` e `npm run build`.
+  `GET /api/carga` (backend) alimenta o rodapé com a geração TSE da carga atual.
 - Teste de neutralidade automatizado em `tests/test_api_comparar.py` (regex de termos avaliativos
   sobre o texto gerado; valores vindos da base são retirados antes). Gerador `v3` = v1 + candidatos
   em outro cargo (40) e outra UF (41).
