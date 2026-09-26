@@ -2,9 +2,10 @@
 Gera ZIPs sintéticos com as MESMAS colunas dos datasets reais do TSE 2026 (arquivos *_BRASIL.csv
 e *_RJ.csv, latin-1, ';', aspas). Para testes — nenhum dado real.
 
-Uso: python tests/gerar_dados_sinteticos.py <pasta_destino> [v1|v2]
+Uso: python tests/gerar_dados_sinteticos.py <pasta_destino> [v1|v2|v3]
   v1 = 40 candidatos. v2 = nova geração: +1 candidato e o candidato 5 passa a INDEFERIDO
-  (serve para testar a tabela `alteracao`). Casos cobertos: CPF repetido (pessoa_id),
+  (serve para testar a tabela `alteracao`). v3 = v1 + candidato 40 (Deputado Federal no RJ) e
+  41 (Governador em SP), para testar comparações entre cargos/UFs diferentes. Casos cobertos: CPF repetido (pessoa_id),
   valores com vírgula e ponto, texto com ';' e aspas, fundamento de indeferimento.
   Casos especiais por índice (armadilhas do CLAUDE.md):
     7  = ausente do arquivo de histórico (histórico indisponível, NÃO estreante);
@@ -32,13 +33,15 @@ H = {
 "consulta_vagas": "DT_GERACAO HH_GERACAO ANO_ELEICAO CD_TIPO_ELEICAO NM_TIPO_ELEICAO CD_ELEICAO DS_ELEICAO DT_ELEICAO DT_POSSE SG_UF SG_UE NM_UE CD_CARGO DS_CARGO QT_VAGA",
 "consulta_coligacao": "DT_GERACAO HH_GERACAO ANO_ELEICAO CD_TIPO_ELEICAO NM_TIPO_ELEICAO NR_TURNO CD_ELEICAO DS_ELEICAO DT_ELEICAO SG_UF SG_UE NM_UE CD_CARGO DS_CARGO TP_AGREMIACAO NR_PARTIDO SG_PARTIDO NM_PARTIDO NR_FEDERACAO NM_FEDERACAO SG_FEDERACAO DS_COMPOSICAO_FEDERACAO SQ_COLIGACAO NM_COLIGACAO DS_COMPOSICAO_COLIGACAO CD_SITUACAO_LEGENDA DS_SITUACAO NM_TIPO_DESTINACAO_VOTOS",
 }
-hh = "08:31:16" if sit=="v1" else "09:10:00"
-N = 40 if sit=="v1" else 41
+hh = {"v1": "08:31:16", "v2": "09:10:00", "v3": "10:00:00"}[sit]
+N = {"v1": 40, "v2": 41, "v3": 42}[sit]
+OUTRO_CARGO = {40: {"CD_CARGO":"6","DS_CARGO":"DEPUTADO FEDERAL"},
+               41: {"CD_CARGO":"3","DS_CARGO":"GOVERNADOR","SG_UF":"SP","SG_UE":"SP","NM_UE":"SÃO PAULO"}} if sit == "v3" else {}
 def base(): return {"DT_GERACAO":"26/09/2026","HH_GERACAO":hh,"ANO_ELEICAO":"2026","CD_ELEICAO":"6259","DS_ELEICAO":"Eleições Gerais Estaduais 2026","DT_ELEICAO":"04/10/2026","SG_UF":"RJ","SG_UE":"RJ","NM_UE":"RIO DE JANEIRO","NR_TURNO":"1","CD_TIPO_ELEICAO":"2","NM_TIPO_ELEICAO":"ELEIÇÃO ORDINÁRIA"}
 rows = {k:[] for k in H}
 for i in range(N):
     sq = str(190000000000+i); b=base()
-    rows["consulta_cand"].append({**b,"CD_CARGO":"7","DS_CARGO":"DEPUTADO ESTADUAL","SQ_CANDIDATO":sq,"NR_CANDIDATO":str(10000+i),"NM_CANDIDATO":"MARIA CONCEIÇÃO ARAÚJO" if i == 12 else f"FULANO {i} DA SILVA","NM_URNA_CANDIDATO":"CONCEIÇÃO ARAÚJO" if i == 12 else f"FULANO {i}","NM_SOCIAL_CANDIDATO":"#NULO","NR_CPF_CANDIDATO":"111" if i<3 else str(i),"DS_EMAIL":"NÃO DIVULGÁVEL","CD_SITUACAO_CANDIDATURA":"-3","DS_SITUACAO_CANDIDATURA":"#NE","TP_AGREMIACAO":"FEDERAÇÃO","NR_PARTIDO":"13","SG_PARTIDO":"PT","NM_PARTIDO":"PARTIDO DOS TRABALHADORES","NR_FEDERACAO":"101","NM_FEDERACAO":"FE BRASIL","SG_FEDERACAO":"13-PT/65-PC do B/43-PV","SQ_COLIGACAO":"190000001","NM_COLIGACAO":"#NULO","DS_COMPOSICAO_COLIGACAO":"PT/PCdoB/PV","SG_UF_NASCIMENTO":"RJ","DT_NASCIMENTO":"15/03/1970","NR_TITULO_ELEITORAL_CANDIDATO":"999","DS_GENERO":"MASCULINO" if i % 3 == 0 else "FEMININO","DS_GRAU_INSTRUCAO":"SUPERIOR COMPLETO","DS_ESTADO_CIVIL":"CASADO(A)","DS_COR_RACA":"PARDA","DS_OCUPACAO":"ADVOGADO","CD_SIT_TOT_TURNO":"-1","DS_SIT_TOT_TURNO":"#NULO"})
+    rows["consulta_cand"].append({**b,"CD_CARGO":"7","DS_CARGO":"DEPUTADO ESTADUAL","SQ_CANDIDATO":sq,"NR_CANDIDATO":str(10000+i),"NM_CANDIDATO":"MARIA CONCEIÇÃO ARAÚJO" if i == 12 else f"FULANO {i} DA SILVA","NM_URNA_CANDIDATO":"CONCEIÇÃO ARAÚJO" if i == 12 else f"FULANO {i}","NM_SOCIAL_CANDIDATO":"#NULO","NR_CPF_CANDIDATO":"111" if i<3 else str(i),"DS_EMAIL":"NÃO DIVULGÁVEL","CD_SITUACAO_CANDIDATURA":"-3","DS_SITUACAO_CANDIDATURA":"#NE","TP_AGREMIACAO":"FEDERAÇÃO","NR_PARTIDO":"13","SG_PARTIDO":"PT","NM_PARTIDO":"PARTIDO DOS TRABALHADORES","NR_FEDERACAO":"101","NM_FEDERACAO":"FE BRASIL","SG_FEDERACAO":"13-PT/65-PC do B/43-PV","SQ_COLIGACAO":"190000001","NM_COLIGACAO":"#NULO","DS_COMPOSICAO_COLIGACAO":"PT/PCdoB/PV","SG_UF_NASCIMENTO":"RJ","DT_NASCIMENTO":"15/03/1970","NR_TITULO_ELEITORAL_CANDIDATO":"999","DS_GENERO":"MASCULINO" if i % 3 == 0 else "FEMININO","DS_GRAU_INSTRUCAO":"SUPERIOR COMPLETO","DS_ESTADO_CIVIL":"CASADO(A)","DS_COR_RACA":"PARDA","DS_OCUPACAO":"ADVOGADO","CD_SIT_TOT_TURNO":"-1","DS_SIT_TOT_TURNO":"#NULO",**OUTRO_CARGO.get(i, {})})
     situ = "DEFERIDO" if not (sit=="v2" and i==5) else "INDEFERIDO"
     tot, julg, urna = (("#NULO", "RENÚNCIA", "NÃO") if i == 8 else (situ, situ, "SIM"))
     rows["consulta_cand_complementar"].append({**b,"SQ_CANDIDATO":sq,"DS_NACIONALIDADE":"BRASILEIRA NATA","NM_MUNICIPIO_NASCIMENTO":"NITERÓI","NR_IDADE_DATA_POSSE":str(30 + i),"ST_QUILOMBOLA":"#NULO" if i == 13 else "N","DS_ETNIA_INDIGENA":"#NULO","VR_DESPESA_MAX_CAMPANHA":"1270629.01","ST_REELEICAO":"#NE","ST_DECLARAR_BENS":"N" if i == 9 else "S","NR_PROCESSO":f"0600{i}","ST_CANDIDATO_INSERIDO_URNA":urna,"NM_TIPO_DESTINACAO_VOTOS":"Válido","DS_SITUACAO_CANDIDATO_TOT":tot,"DS_SITUACAO_JULGAMENTO":julg,"ST_SUBSTITUIDO":"N","SQ_SUBSTITUIDO":"-1"})

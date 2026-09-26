@@ -38,7 +38,7 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
 - `ingestao/ingestao_tse.py`: carga versionada em DuckDB (`eleicoes.duckdb`). Uso:
   `python ingestao/ingestao_tse.py "<pasta dos zips>"`. Rodar de novo com nova geração do TSE
   cria nova carga e registra diferenças em `alteracao`.
-- Estrutura: `ingestao/`, `backend/`, `frontend/` (vazio), `tests/`, `docs/`
+- Estrutura: `ingestao/`, `backend/`, `frontend/`, `tests/`, `docs/`
   (`docs/inventario_tse.md` = saída do inventário).
 - API (`backend/app/`): `ELEICOES_DB=eleicoes.duckdb uvicorn app.main:app --app-dir backend`.
   `db.py` (conexão read-only, cursor por requisição), `metadados.py` (natureza + fonte TSE de cada
@@ -51,6 +51,41 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
   estatísticas), gera a descrição em texto e os alertas (cargos/UFs misturados, n < 30).
   Estatísticas: registros sem o dado ficam fora do cálculo e são contados em `n_sem_dado` com o
   motivo; posição do candidato = percentil (posição média) + relação com a mediana, nunca "nº X de Y".
+  `rotas/comparar.py` (`GET /api/comparar?sq=1&sq=2` ou `?sq=1,2`, 2 a 5): tabela lado a lado com
+  fonte por valor, verificações (mesmo cargo/UF/partido, histórico e bens disponíveis, mesma pessoa),
+  alertas e "Principais diferenças encontradas nos dados" (só fatos; moeda não formatada no texto).
+- Frontend (`frontend/`, Next.js 16 + React 19 + Tailwind 4 + ECharts): `npm install`, `npm run build`,
+  `npm start` (porta 3000; `API_URL` = backend, padrão http://localhost:8000 — `/api/*` é repassado
+  pelo `next.config.ts`). Telas: Início (cartões + candidaturas por cargo + patrimônio, com filtros),
+  Candidatos (busca com filtros/ordenação/paginação na URL), Candidato (`/candidatos/[sq]`) e Comparar
+  (seleção de até 5 no localStorage). `components/FiguraGrafico` exige título, unidade, universo,
+  período e fonte e oferece "Ver tabela"; `SeloNatureza` + `VerFonte` em cada campo; cores como
+  tokens em `app/globals.css` (claro/escuro). Moeda formatada só em `lib/formato.ts`; códigos
+  (sq_/nr_/cd_) nunca ganham separador de milhar. Checagem: `npm run typecheck` e `npm run build`.
+  `GET /api/carga` (backend) alimenta o rodapé com a geração TSE da carga atual.
+- T9: `rotas/qualidade.py` — `GET /api/cargas`, `GET /api/qualidade[?carga_id=]` (verificações da
+  carga + valor da carga anterior + explicação em texto de cada verificação em `EXPLICACOES`; nova
+  verificação na ingestão exige explicação, há teste) e `GET /api/alteracoes[?carga_id=&campo=&uf=&cd_cargo=]`
+  (resumo por campo, transições de situação, itens; candidato removido usa dados da carga anterior).
+  Telas `/qualidade` e `/alteracoes` no frontend.
+- T8: `exportar.py` (CSV UTF-8 com BOM, `;`, vírgula decimal, metadados em linhas `# chave;valor`,
+  tabelas após `## nome`; Excel com aba `metadados` + uma aba por tabela + `campos`) e
+  `rotas/exportar.py` (`GET /api/exportar/{candidatos|comparar|estatisticas}?formato=csv|xlsx` + os
+  mesmos parâmetros da tela). As rotas chamam as funções das rotas de consulta — exportação nunca
+  diverge da tela. Ausência = texto "não disponível no dataset utilizado"; pessoa_id nunca sai.
+  Botões "Exportar: CSV | Excel" na busca, no comparador e no início (`components/Exportar.tsx`).
+- T10 "Pergunte aos dados": `backend/app/ia/` — `cliente.py` (chat/completions formato OpenAI; padrão
+  API da NVIDIA: `NVIDIA_API_KEY`, `IA_BASE_URL`=https://integrate.api.nvidia.com/v1,
+  `IA_MODELO`=meta/llama-3.3-70b-instruct — precisa suportar tool calling; cliente injetável em
+  `criar_app(ia_cliente=...)`), `ferramentas.py` (10 ferramentas = funções das rotas, respostas enxutas),
+  `neutralidade.py` (recusa ANTES do modelo: voto, melhores/piores/ranking, inferências pessoais;
+  checagem de termos avaliativos DEPOIS, com 1 reescrita, senão resposta retida), `agente.py` (prompt
+  com as regras, até 6 rodadas, resposta JSON {criterio, resposta, calculo}, log em `logs/ia.jsonl`
+  — fora do Git). Rota `POST /api/perguntar` (+ `GET /api/perguntar/status`); sem chave → 503.
+  Tela `/perguntar`. Testes com modelo roteirizado (`tests/test_ia.py`), nunca chamam serviço externo.
+- Teste de neutralidade automatizado em `tests/test_api_comparar.py` (regex de termos avaliativos
+  sobre o texto gerado; valores vindos da base são retirados antes). Gerador `v3` = v1 + candidatos
+  em outro cargo (40) e outra UF (41).
 - Categorias de bens: mapa versionado `ingestao/categorias_bens.csv` (tipo;categoria;observacao,
   UTF-8) carregado na ingestão como tabela `categoria_bem`; `bem.categoria` é CÁLCULO. Tipo fora do
   mapa fica com categoria NULL e é medido em `qualidade`. Mudou o mapa? Rodar a ingestão com `--forcar`.

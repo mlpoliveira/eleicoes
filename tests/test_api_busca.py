@@ -180,3 +180,9 @@ def test_banco_inexistente(tmp_path):
     from app.main import criar_app
     with TestClient(criar_app(tmp_path / "nao_existe.duckdb")) as c:
         assert c.get("/api/candidatos").status_code == 503
+
+
+def test_carga_atual(cliente):
+    r = cliente.get("/api/carga").json()
+    assert r["carga_id"] == 1 and r["geracao_tse"] == "26/09/2026 08:31:16"
+    assert r["qt_candidaturas"] == 40 and r["qt_cargas"] == 1
