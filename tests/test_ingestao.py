@@ -189,3 +189,8 @@ def test_qualidade_por_carga(con_v2):
                       "AND verificacao = 'candidatos'") == 41
     assert um(con_v2, "SELECT quantidade FROM qualidade WHERE carga_id = 1 "
                       "AND verificacao = 'candidatos'") == 40
+
+
+def test_booleano_ausente_continua_nulo(con_v1):
+    assert linha(con_v1, SQ + 13)["quilombola"] is None
+    assert linha(con_v1, SQ)["quilombola"] is False

@@ -114,6 +114,8 @@ def gravar_raw(con, tabela: str, df: pd.DataFrame, carga_id: int):
 MACROS = r"""
 CREATE OR REPLACE MACRO nz(v) AS CASE WHEN trim(v) IN ('', '#NULO', '#NULO#', '#NE', '#NE#') THEN NULL ELSE trim(v) END;
 CREATE OR REPLACE MACRO nzcod(v) AS CASE WHEN trim(v) IN ('', '-1', '-3', '#NULO', '#NE') THEN NULL ELSE trim(v) END;
+-- sim/não do TSE -> BOOLEAN; ausência (#NULO/#NE) continua NULL (ausência não é "não")
+CREATE OR REPLACE MACRO sn(v, sim) AS CASE WHEN nz(v) IS NULL THEN NULL ELSE nz(v) = sim END;
 CREATE OR REPLACE MACRO dt(v) AS try_strptime(nz(v), '%d/%m/%Y')::DATE;
 CREATE OR REPLACE MACRO valor(v) AS try_cast(
     CASE WHEN nz(v) LIKE '%,%' THEN replace(replace(nz(v), '.', ''), ',', '.') ELSE nz(v) END
@@ -158,7 +160,7 @@ SELECT
     c.DS_GRAU_INSTRUCAO                       AS grau_instrucao,
     c.DS_ESTADO_CIVIL                         AS estado_civil,
     c.DS_OCUPACAO                             AS ocupacao,
-    k.ST_QUILOMBOLA = 'S'                     AS quilombola,
+    sn(k.ST_QUILOMBOLA, 'S')                 AS quilombola,
     nz(k.DS_ETNIA_INDIGENA)                   AS etnia_indigena,
     -- situação: vem do COMPLEMENTAR (no consulta_cand está 100% #NE). Candidaturas fora da urna
     -- (renúncia, indeferimento...) têm o campo TOT = #NULO; aí vale o DS_SITUACAO_JULGAMENTO.
@@ -167,8 +169,8 @@ SELECT
          WHEN nz(k.DS_SITUACAO_JULGAMENTO) IS NOT NULL THEN 'DS_SITUACAO_JULGAMENTO' END AS situacao_campo_origem,
     nz(k.DS_SITUACAO_JULGAMENTO)              AS situacao_julgamento,
     nz(k.NM_TIPO_DESTINACAO_VOTOS)            AS destinacao_votos,
-    k.ST_CANDIDATO_INSERIDO_URNA = 'SIM'      AS na_urna,
-    k.ST_SUBSTITUIDO = 'S'                    AS substituido,
+    sn(k.ST_CANDIDATO_INSERIDO_URNA, 'SIM')    AS na_urna,
+    sn(k.ST_SUBSTITUIDO, 'S')                AS substituido,
     try_cast(nzcod(k.SQ_SUBSTITUIDO) AS BIGINT) AS sq_substituido,
     nz(k.ST_DECLARAR_BENS)                    AS declarou_bens,
     CASE WHEN valor(k.VR_DESPESA_MAX_CAMPANHA) > 0

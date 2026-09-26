@@ -42,7 +42,10 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
   (`docs/inventario_tse.md` = saída do inventário).
 - API (`backend/app/`): `ELEICOES_DB=eleicoes.duckdb uvicorn app.main:app --app-dir backend`.
   `db.py` (conexão read-only, cursor por requisição), `metadados.py` (natureza + fonte TSE de cada
-  campo exposto), `rotas/candidatos.py` (`GET /api/candidatos`, `GET /api/filtros`).
+  campo exposto), `rotas/candidatos.py` (`GET /api/candidatos`, `GET /api/filtros`),
+  `rotas/candidato.py` (`GET /api/candidatos/{sq}` com seções, cada campo com natureza + fonte;
+  `GET /api/fonte?tabela=&sq=&campo=[&nr_ordem=|&linha=]` devolve arquivo, linha e o texto
+  original do CSV lido das tabelas `raw_*`).
   A busca normaliza nome e termo (minúsculas, sem acento, sem pontuação); correspondência
   "exata" (trecho) vem antes da "aproximada" (Jaro-Winkler >= 0,90 por palavra de 4+ letras).
   A API trava o arquivo do DuckDB: pare-a antes de rodar nova carga.
