@@ -15,7 +15,8 @@ const ITENS: { rotulo: string; href?: string }[] = [
   { rotulo: "Histórico" },
   { rotulo: "Investigar" },
   { rotulo: "Pergunte aos dados" },
-  { rotulo: "Qualidade dos dados" },
+  { rotulo: "Qualidade dos dados", href: "/qualidade" },
+  { rotulo: "Alterações", href: "/alteracoes" },
   { rotulo: "Fontes" },
 ];
 

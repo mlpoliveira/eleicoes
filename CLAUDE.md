@@ -63,6 +63,11 @@ nunca "em quem votar". Fluxo: PERGUNTA → DADOS → CRUZAMENTO → CÁLCULO →
   tokens em `app/globals.css` (claro/escuro). Moeda formatada só em `lib/formato.ts`; códigos
   (sq_/nr_/cd_) nunca ganham separador de milhar. Checagem: `npm run typecheck` e `npm run build`.
   `GET /api/carga` (backend) alimenta o rodapé com a geração TSE da carga atual.
+- T9: `rotas/qualidade.py` — `GET /api/cargas`, `GET /api/qualidade[?carga_id=]` (verificações da
+  carga + valor da carga anterior + explicação em texto de cada verificação em `EXPLICACOES`; nova
+  verificação na ingestão exige explicação, há teste) e `GET /api/alteracoes[?carga_id=&campo=&uf=&cd_cargo=]`
+  (resumo por campo, transições de situação, itens; candidato removido usa dados da carga anterior).
+  Telas `/qualidade` e `/alteracoes` no frontend.
 - Teste de neutralidade automatizado em `tests/test_api_comparar.py` (regex de termos avaliativos
   sobre o texto gerado; valores vindos da base são retirados antes). Gerador `v3` = v1 + candidatos
   em outro cargo (40) e outra UF (41).
